@@ -1,0 +1,948 @@
+﻿
+
+@model List<RapidApi_BookingProject.Dtos.HotelPropertyDto>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Otel Ara — StayLux</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --gold: #C9A84C;
+            --gold-light: #E8C96A;
+            --gold-dark: #9A7A2E;
+            --dark: #0D0D0D;
+            --dark-2: #141414;
+            --dark-3: #1E1E1E;
+            --dark-4: #2A2A2A;
+            --light: #F5F0E8;
+            --muted: #888;
+            --white: #FFFFFF;
+            --radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--dark);
+            color: var(--light);
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 300;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 500;
+        }
+
+        /* NAVBAR */
+        .navbar-staylux {
+            background: rgba(13,13,13,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(201,168,76,0.15);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--gold) !important;
+            letter-spacing: 2px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-link-lux {
+            color: rgba(245,240,232,0.7) !important;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 6px 14px !important;
+            transition: color 0.2s;
+        }
+
+            .nav-link-lux:hover {
+                color: var(--gold) !important;
+            }
+
+        .btn-nav-cta {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: var(--dark) !important;
+            font-weight: 600 !important;
+            border-radius: 50px;
+            padding: 8px 20px !important;
+            font-size: 0.82rem !important;
+        }
+
+        /* PAGE HEADER */
+        .page-header {
+            background: var(--dark-2);
+            border-bottom: 1px solid rgba(201,168,76,0.1);
+            padding: 32px 0;
+        }
+
+        /* SIDEBAR FILTER */
+        .filter-sidebar {
+            position: sticky;
+            top: 80px;
+        }
+
+        .filter-card {
+            background: var(--dark-3);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .filter-header {
+            background: linear-gradient(135deg, var(--dark-4), var(--dark-3));
+            padding: 20px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .filter-body {
+            padding: 20px 24px;
+        }
+
+        .filter-section {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+            .filter-section:last-child {
+                border-bottom: none;
+                margin-bottom: 0;
+                padding-bottom: 0;
+            }
+
+        .filter-label {
+            font-size: 0.7rem;
+            color: var(--gold);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* FORM ELEMENTS */
+        .form-control-lux, .form-select-lux {
+            background: rgba(255,255,255,0.04) !important;
+            border: 1px solid rgba(201,168,76,0.15) !important;
+            color: var(--light) !important;
+            border-radius: 10px !important;
+            padding: 10px 14px !important;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.88rem;
+            transition: all 0.3s;
+        }
+
+            .form-control-lux:focus, .form-select-lux:focus {
+                background: rgba(201,168,76,0.05) !important;
+                border-color: rgba(201,168,76,0.5) !important;
+                box-shadow: 0 0 0 3px rgba(201,168,76,0.1) !important;
+                outline: none;
+            }
+
+            .form-control-lux::placeholder {
+                color: rgba(245,240,232,0.25) !important;
+            }
+
+            .form-select-lux option {
+                background: #1a1a1a;
+                color: var(--light);
+            }
+
+        /* RANGE SLIDER */
+        .range-lux {
+            width: 100%;
+            accent-color: var(--gold);
+            cursor: pointer;
+        }
+
+        /* STAR RATING */
+        .star-filter {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .star-btn {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: rgba(245,240,232,0.5);
+            padding: 5px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.78rem;
+            transition: all 0.2s;
+        }
+
+            .star-btn:hover, .star-btn.active {
+                background: rgba(201,168,76,0.15);
+                border-color: rgba(201,168,76,0.4);
+                color: var(--gold);
+            }
+
+        /* BUTTONS */
+        .btn-search-lux {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: var(--dark);
+            border: none;
+            border-radius: 12px;
+            padding: 12px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+            .btn-search-lux:hover {
+                box-shadow: 0 8px 20px rgba(201,168,76,0.3);
+                transform: translateY(-1px);
+            }
+
+        .btn-reset {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--muted);
+            border-radius: 10px;
+            padding: 8px 16px;
+            font-size: 0.78rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+            .btn-reset:hover {
+                border-color: rgba(255,255,255,0.2);
+                color: var(--light);
+            }
+
+        /* CITY CARDS */
+        .city-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .city-card {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            height: 120px;
+        }
+
+            .city-card img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                filter: brightness(0.5);
+                transition: all 0.3s;
+            }
+
+            .city-card:hover img {
+                filter: brightness(0.7);
+                transform: scale(1.05);
+            }
+
+            .city-card.active {
+                border-color: var(--gold);
+            }
+
+                .city-card.active img {
+                    filter: brightness(0.8);
+                }
+
+        .city-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 10px 12px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+        }
+
+        .city-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .city-country {
+            font-size: 0.68rem;
+            color: rgba(245,240,232,0.6);
+        }
+
+        .city-selected-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--gold);
+            color: var(--dark);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+        }
+
+        .city-card.active .city-selected-badge {
+            display: flex;
+        }
+
+        /* RESULTS */
+        .results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gold);
+            font-size: 0.72rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+            .section-label::before, .section-label::after {
+                content: '';
+                width: 20px;
+                height: 1px;
+                background: var(--gold);
+                opacity: 0.5;
+            }
+
+        /* HOTEL LIST (dikey) */
+        .hotel-list-card {
+            background: var(--dark-3);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: var(--radius);
+            overflow: hidden;
+            display: flex;
+            transition: all 0.3s;
+            margin-bottom: 16px;
+        }
+
+            .hotel-list-card:hover {
+                border-color: rgba(201,168,76,0.25);
+                box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+                transform: translateX(4px);
+            }
+
+        .hotel-list-img {
+            width: 220px;
+            min-width: 220px;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .hotel-list-img img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.4s;
+            }
+
+        .hotel-list-card:hover .hotel-list-img img {
+            transform: scale(1.06);
+        }
+
+        .hotel-list-body {
+            padding: 20px 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .hotel-list-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            color: var(--white);
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .hotel-list-location {
+            font-size: 0.82rem;
+            color: var(--muted);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .hotel-list-stars {
+            color: var(--gold);
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+
+        .hotel-badge-tag {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: rgba(245,240,232,0.55);
+            font-size: 0.72rem;
+            padding: 3px 10px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-right: 4px;
+            margin-bottom: 4px;
+        }
+
+        .hotel-list-right {
+            padding: 20px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: space-between;
+            min-width: 180px;
+            border-left: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .hotel-list-rating {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: var(--dark);
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 6px 12px;
+            border-radius: 10px;
+        }
+
+        .hotel-list-price {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            color: var(--gold);
+            font-weight: 600;
+            line-height: 1;
+        }
+
+        .hotel-list-price-note {
+            font-size: 0.72rem;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .btn-detail-lux {
+            background: transparent;
+            border: 1px solid rgba(201,168,76,0.4);
+            color: var(--gold);
+            border-radius: 10px;
+            padding: 8px 18px;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+            .btn-detail-lux:hover {
+                background: var(--gold);
+                color: var(--dark);
+            }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--muted);
+        }
+
+        /* SPINNER */
+        .lux-spinner {
+            width: 44px;
+            height: 44px;
+            border: 2px solid rgba(201,168,76,0.2);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+            margin: 0 auto 14px;
+        }
+
+        @@keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold-dark);
+            border-radius: 3px;
+        }
+
+        @@media (max-width: 991px) {
+            .filter-sidebar {
+                position: static;
+            }
+
+            .hotel-list-img {
+                width: 140px;
+                min-width: 140px;
+            }
+
+            .hotel-list-right {
+                min-width: 130px;
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .hotel-list-card {
+                flex-direction: column;
+            }
+
+            .hotel-list-img {
+                width: 100%;
+                min-width: unset;
+                height: 180px;
+            }
+
+            .hotel-list-right {
+                border-left: none;
+                border-top: 1px solid rgba(255,255,255,0.06);
+                flex-direction: row;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar-staylux">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-between w-100">
+                <a href="/" class="navbar-brand-logo">
+                    <div class="logo-icon"><i class="fas fa-gem text-dark" style="font-size:0.9rem;"></i></div>
+                    StayLux
+                </a>
+                <ul class="nav d-none d-lg-flex align-items-center gap-1">
+                    <li><a href="/Hotel/Index" class="nav-link">Keşfet</a></li>
+                    <li><a href="/Hotel/Search/" class="nav-link">Destinasyonlar</a></li>
+                    <li><a href="/AI/Index/" class="nav-link">Tur Oluştur</a></li>
+                    <li><a href="/About/Index/" class="nav-link">Hakkımızda</a></li>
+                    <li><a href="#" class="nav-link btn-nav-cta ms-2">Giriş Yap</a></li>
+                </ul>
+                <button class="btn d-lg-none" style="color:var(--gold);font-size:1.3rem;"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+        <div class="container">
+            <div class="section-label mb-2">Otel Arama</div>
+            <h1 style="font-size:2rem; color:var(--white);">Hayalinizdeki Oteli <span style="color:var(--gold);">Bulun</span></h1>
+        </div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="container" style="padding: 32px 0 80px;">
+        <div class="row g-4">
+
+            <!-- SOL: FİLTRE -->
+            <div class="col-lg-3">
+                <div class="filter-sidebar">
+                    <form asp-action="SearchAdvanced" asp-controller="Hotel" method="post" id="searchForm">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" id="destIdInput" name="DestId" />
+
+                        <div class="filter-card">
+                            <div class="filter-header">
+                                <span style="font-size:0.78rem; color:var(--gold); letter-spacing:2px; text-transform:uppercase; font-weight:500;">
+                                    <i class="fas fa-sliders-h me-2"></i> Filtreler
+                                </span>
+                                <button type="button" class="btn-reset" onclick="resetFilters()">Sıfırla</button>
+                            </div>
+
+                            <div class="filter-body">
+
+                                <!-- ŞEHİR -->
+                                <div class="filter-section">
+                                    <div class="filter-label"><i class="fas fa-map-marker-alt" style="font-size:0.6rem;"></i> Şehir</div>
+                                    <select class="form-select-lux form-select" id="countrySelect" onchange="loadCities(this.value)">
+                                        <option value="">— Ülke Seçin —</option>
+                                        <option value="France">🇫🇷 Fransa</option>
+                                        <option value="Italy">🇮🇹 İtalya</option>
+                                        <option value="Spain">🇪🇸 İspanya</option>
+                                        <option value="Greece">🇬🇷 Yunanistan</option>
+                                        <option value="Germany">🇩🇪 Almanya</option>
+                                        <option value="Netherlands">🇳🇱 Hollanda</option>
+                                        <option value="Portugal">🇵🇹 Portekiz</option>
+                                        <option value="Austria">🇦🇹 Avusturya</option>
+                                        <option value="Switzerland">🇨🇭 İsviçre</option>
+                                        <option value="Croatia">🇭🇷 Hırvatistan</option>
+                                    </select>
+                                    <select class="form-select-lux form-select mt-2" id="citySelect" name="CityName" disabled>
+                                        <option value="">— Önce Ülke Seçin —</option>
+                                    </select>
+                                    <div id="cityStatus" style="min-height:14px; margin-top:4px; font-size:0.72rem;"></div>
+                                </div>
+
+                                <!-- TARİHLER -->
+                                <div class="filter-section">
+                                    <div class="filter-label"><i class="fas fa-calendar" style="font-size:0.6rem;"></i> Tarihler</div>
+                                    <label style="font-size:0.72rem; color:var(--muted); margin-bottom:4px; display:block;">Giriş</label>
+                                    <input type="date" class="form-control-lux form-control mb-2" name="ArrivalDate" id="checkIn" />
+                                    <label style="font-size:0.72rem; color:var(--muted); margin-bottom:4px; display:block;">Çıkış</label>
+                                    <input type="date" class="form-control-lux form-control" name="DepartureDate" id="checkOut" />
+                                </div>
+
+                                <!-- KİŞİLER -->
+                                <div class="filter-section">
+                                    <div class="filter-label"><i class="fas fa-users" style="font-size:0.6rem;"></i> Kişiler</div>
+                                    <label style="font-size:0.72rem; color:var(--muted); margin-bottom:4px; display:block;">Yetişkin</label>
+                                    <select class="form-select-lux form-select mb-2" name="Adults">
+                                        <option value="1">1 Yetişkin</option>
+                                        <option value="2" selected>2 Yetişkin</option>
+                                        <option value="3">3 Yetişkin</option>
+                                        <option value="4">4 Yetişkin</option>
+                                        <option value="5">5+ Yetişkin</option>
+                                    </select>
+                                    <label style="font-size:0.72rem; color:var(--muted); margin-bottom:4px; display:block;">Çocuk Yaşları <span style="color:rgba(245,240,232,0.3);">(virgülle: 5,10)</span></label>
+                                    <input type="text" class="form-control-lux form-control mb-2" name="ChildrenAge" placeholder="ör: 5,10,17" />
+                                    <label style="font-size:0.72rem; color:var(--muted); margin-bottom:4px; display:block;">Oda Sayısı</label>
+                                    <select class="form-select-lux form-select" name="RoomQty">
+                                        <option value="1" selected>1 Oda</option>
+                                        <option value="2">2 Oda</option>
+                                        <option value="3">3 Oda</option>
+                                        <option value="4">4 Oda</option>
+                                    </select>
+                                </div>
+
+                                <!-- FİYAT -->
+                                <div class="filter-section">
+                                    <div class="filter-label"><i class="fas fa-tag" style="font-size:0.6rem;"></i> Fiyat Aralığı</div>
+                                    <div class="d-flex gap-2">
+                                        <div style="flex:1;">
+                                            <label style="font-size:0.72rem; color:var(--muted); margin-bottom:4px; display:block;">Min (₺)</label>
+                                            <input type="number" class="form-control-lux form-control" name="PriceMin" placeholder="0" min="0" />
+                                        </div>
+                                        <div style="flex:1;">
+                                            <label style="font-size:0.72rem; color:var(--muted); margin-bottom:4px; display:block;">Max (₺)</label>
+                                            <input type="number" class="form-control-lux form-control" name="PriceMax" placeholder="50000" min="0" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- SIRALAMA -->
+                                <div class="filter-section">
+                                    <div class="filter-label"><i class="fas fa-sort" style="font-size:0.6rem;"></i> Sıralama</div>
+                                    <select class="form-select-lux form-select" name="SortBy">
+                                        <option value="">Varsayılan</option>
+                                        <option value="popularity">Popülerlik</option>
+                                        <option value="price">Fiyat (Düşük → Yüksek)</option>
+                                        <option value="price_desc">Fiyat (Yüksek → Düşük)</option>
+                                        <option value="review_score">Puan</option>
+                                        <option value="distance">Merkeze Uzaklık</option>
+                                    </select>
+                                </div>
+
+                                <!-- PARA BİRİMİ -->
+                                <div class="filter-section">
+                                    <div class="filter-label"><i class="fas fa-coins" style="font-size:0.6rem;"></i> Para Birimi</div>
+                                    <select class="form-select-lux form-select" name="CurrencyCode">
+                                        <option value="TRY" selected>🇹🇷 TRY - Türk Lirası</option>
+                                        <option value="USD">🇺🇸 USD - Dolar</option>
+                                        <option value="EUR">🇪🇺 EUR - Euro</option>
+                                        <option value="GBP">🇬🇧 GBP - Sterlin</option>
+                                        <option value="AED">🇦🇪 AED - Dirhem</option>
+                                    </select>
+                                </div>
+
+                                <!-- SAYFA -->
+                                <div class="filter-section">
+                                    <div class="filter-label"><i class="fas fa-file" style="font-size:0.6rem;"></i> Sayfa</div>
+                                    <select class="form-select-lux form-select" name="PageNumber">
+                                        <option value="1" selected>Sayfa 1</option>
+                                        <option value="2">Sayfa 2</option>
+                                        <option value="3">Sayfa 3</option>
+                                        <option value="4">Sayfa 4</option>
+                                        <option value="5">Sayfa 5</option>
+                                    </select>
+                                </div>
+
+                                <button type="submit" class="btn-search-lux">
+                                    <i class="fas fa-search me-2"></i> Otel Ara
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- SAĞ: ŞEHİRLER + SONUÇLAR -->
+            <div class="col-lg-9">
+
+                <!-- Popüler Şehirler -->
+                <div id="citySection">
+                    <div class="section-label mb-3">Popüler Destinasyonlar</div>
+                    <div class="city-grid">
+                        @{
+                            var cities = new[] {
+                            new { Name="Paris", Country="Fransa", CountryKey="France", Img="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=400&q=80" },
+                            new { Name="Rome", Country="İtalya", CountryKey="Italy", Img="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=400&q=80" },
+                            new { Name="Barcelona", Country="İspanya", CountryKey="Spain", Img="https://images.unsplash.com/photo-1583422409516-2895a77efded?w=400&q=80" },
+                            new { Name="Amsterdam", Country="Hollanda", CountryKey="Netherlands", Img="https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=400&q=80" },
+                            new { Name="Athens", Country="Yunanistan", CountryKey="Greece", Img="https://images.unsplash.com/photo-1555993539-1732b0258235?w=400&q=80" },
+                            new { Name="Vienna", Country="Avusturya", CountryKey="Austria", Img="https://images.unsplash.com/photo-1516550893923-42d28e5677af?w=400&q=80" },
+                            new { Name="Lisbon", Country="Portekiz", CountryKey="Portugal", Img="https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=400&q=80" },
+                            new { Name="Berlin", Country="Almanya", CountryKey="Germany", Img="https://images.unsplash.com/photo-1560969184-10fe8719e047?w=400&q=80" },
+                            new { Name="Zurich", Country="İsviçre", CountryKey="Switzerland", Img="https://images.unsplash.com/photo-1515488764276-beab7607c1e6?w=400&q=80" },
+                            new { Name="Dubrovnik", Country="Hırvatistan", CountryKey="Croatia", Img="https://images.unsplash.com/photo-1555990793-da11153b2473?w=400&q=80" },
+                            new { Name="Munich", Country="Almanya", CountryKey="Germany", Img="https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=400&q=80" },
+                            new { Name="Venice", Country="İtalya", CountryKey="Italy", Img="https://images.unsplash.com/photo-1513581166391-887a96ddeafd?w=400&q=80" },
+                        };
+                        }
+                        @foreach (var city in cities)
+                        {
+                            <div class="city-card" onclick="selectCity('@city.Name', '@city.CountryKey', this)">
+                                <img src="@city.Img" alt="@city.Name" loading="lazy" />
+                                <div class="city-info">
+                                    <div class="city-name">@city.Name</div>
+                                    <div class="city-country">@city.Country</div>
+                                </div>
+                                <div class="city-selected-badge"><i class="fas fa-check"></i></div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Yükleniyor -->
+                <div id="loadingOverlay" style="display:none; text-align:center; padding:60px 0;">
+                    <div class="lux-spinner"></div>
+                    <p style="color:var(--muted); letter-spacing:2px; font-size:0.82rem;">OTELLER ARANIYIOR…</p>
+                </div>
+
+                <!-- Sonuçlar -->
+                <div id="resultsSection" style="@(Model != null && Model.Any() ? "" : "display:none;")">
+                    <div class="results-header">
+                        <div>
+                            <div class="section-label">Arama Sonuçları</div>
+                            @if (Model != null)
+                            {
+                                <p style="color:var(--muted); font-size:0.85rem; margin-top:4px;">@Model.Count otel bulundu</p>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Otel Listesi (dikey) -->
+                    <div id="hotelList">
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var hotel in Model)
+                            {
+                                <div class="hotel-list-card">
+                                    <div class="hotel-list-img">
+                                        <img src="@(hotel.PhotoUrls?.FirstOrDefault() ?? "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&q=80")"
+                                             alt="@hotel.Name" loading="lazy" />
+                                    </div>
+                                    <div class="hotel-list-body">
+                                        <div>
+                                            <div class="hotel-list-name">@hotel.Name</div>
+                                            <div class="hotel-list-location">
+                                                <i class="fas fa-map-marker-alt" style="color:var(--gold); font-size:0.65rem;"></i>
+                                                @hotel.CountryCode
+                                            </div>
+                                            @if (hotel.PropertyClass.HasValue && hotel.PropertyClass > 0)
+                                            {
+                                                <div class="hotel-list-stars">@(new string('★', hotel.PropertyClass.Value))</div>
+                                            }
+                                            <div style="margin-top:8px;">
+                                                @if (hotel.ReviewCount.HasValue)
+                                                {
+                                                    <span class="hotel-badge-tag"><i class="fas fa-comments" style="font-size:0.6rem;"></i> @hotel.ReviewCount yorum</span>
+                                                }
+                                                @if (!string.IsNullOrEmpty(hotel.ReviewScoreWord))
+                                                {
+                                                    <span class="hotel-badge-tag">@hotel.ReviewScoreWord</span>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hotel-list-right">
+                                        @if (hotel.ReviewScore.HasValue)
+                                        {
+                                            <div class="hotel-list-rating">@hotel.ReviewScore.Value.ToString("0.0")</div>
+                                        }
+                                        <div style="text-align:right;">
+                                            @if (hotel.PriceBreakdown?.GrossPrice != null)
+                                            {
+                                                <div class="hotel-list-price">@hotel.PriceBreakdown.GrossPrice.Value.ToString("N0")</div>
+                                                <div class="hotel-list-price-note">@hotel.PriceBreakdown.GrossPrice.Currency / gece</div>
+                                            }
+                                            <a href="/Hotel/Detail/@hotel.HotelId" class="btn-detail-lux">
+                                                Detay <i class="fas fa-arrow-right" style="font-size:0.65rem;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <!-- Boş state -->
+                @if (Model == null || !Model.Any())
+                {
+                    <div class="empty-state">
+                        <i class="fas fa-search" style="font-size:3rem; color:rgba(201,168,76,0.3); margin-bottom:16px; display:block;"></i>
+                        <h3 style="font-size:1.5rem; color:var(--white); margin-bottom:8px;">Bir şehir seçin</h3>
+                        <p style="font-size:0.88rem;">Yukarıdan bir destinasyon seçin veya filtreler ile arama yapın.</p>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const cityData = {
+            France: ['Paris', 'Lyon', 'Marseille', 'Nice', 'Bordeaux', 'Toulouse', 'Strasbourg', 'Cannes'],
+            Italy: ['Rome', 'Milan', 'Venice', 'Florence', 'Naples', 'Turin', 'Bologna', 'Verona'],
+            Spain: ['Madrid', 'Barcelona', 'Seville', 'Valencia', 'Malaga', 'Granada', 'Bilbao', 'Ibiza'],
+            Greece: ['Athens', 'Santorini', 'Mykonos', 'Rhodes', 'Thessaloniki', 'Corfu'],
+            Germany: ['Berlin', 'Munich', 'Hamburg', 'Frankfurt', 'Cologne', 'Stuttgart', 'Dresden'],
+            Netherlands: ['Amsterdam', 'Rotterdam', 'The Hague', 'Utrecht', 'Eindhoven'],
+            Portugal: ['Lisbon', 'Porto', 'Algarve', 'Sintra', 'Faro', 'Lagos'],
+            Austria: ['Vienna', 'Salzburg', 'Innsbruck', 'Graz', 'Hallstatt'],
+            Switzerland: ['Zurich', 'Geneva', 'Bern', 'Lucerne', 'Basel', 'Interlaken', 'Zermatt'],
+            Croatia: ['Zagreb', 'Dubrovnik', 'Split', 'Hvar', 'Zadar', 'Pula'],
+        };
+
+        function loadCities(country) {
+            const citySelect = document.getElementById('citySelect');
+            citySelect.innerHTML = '<option value="">— Şehir Seçin —</option>';
+            if (!country) { citySelect.disabled = true; return; }
+            (cityData[country] || []).forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c; opt.textContent = c;
+                citySelect.appendChild(opt);
+            });
+            citySelect.disabled = false;
+        }
+
+        document.getElementById('citySelect').addEventListener('change', function () {
+            document.getElementById('destIdInput').value = this.value;
+        });
+
+        function selectCity(cityName, countryKey, el) {
+            // Tüm aktif kartları temizle
+            document.querySelectorAll('.city-card').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+
+            // Filtrele
+            const countrySelect = document.getElementById('countrySelect');
+            countrySelect.value = countryKey;
+            loadCities(countryKey);
+
+            setTimeout(() => {
+                const citySelect = document.getElementById('citySelect');
+                citySelect.value = cityName;
+                document.getElementById('destIdInput').value = cityName;
+                document.getElementById('cityStatus').innerHTML = `<span style="color:#4ade80; font-size:0.72rem;">✓ ${cityName} seçildi</span>`;
+            }, 100);
+
+            // Sayfayı forma scroll et
+            document.getElementById('searchForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Filtre sıfırla
+        function resetFilters() {
+            document.getElementById('searchForm').reset();
+            document.getElementById('destIdInput').value = '';
+            document.querySelectorAll('.city-card').forEach(c => c.classList.remove('active'));
+            document.getElementById('citySelect').disabled = true;
+            document.getElementById('cityStatus').textContent = '';
+        }
+
+        // Default tarihler
+        window.addEventListener('DOMContentLoaded', () => {
+            const today = new Date();
+            const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
+            const nextWeek = new Date(today); nextWeek.setDate(today.getDate() + 7);
+            const fmt = d => d.toISOString().split('T')[0];
+            document.getElementById('checkIn').value = fmt(tomorrow);
+            document.getElementById('checkOut').value = fmt(nextWeek);
+            document.getElementById('checkIn').min = fmt(today);
+        });
+
+        // Form submit
+        document.getElementById('searchForm').addEventListener('submit', function (e) {
+            const dest = document.getElementById('destIdInput').value;
+            if (!dest) {
+                e.preventDefault();
+                document.getElementById('cityStatus').innerHTML = '<span style="color:#f87171; font-size:0.72rem;">⚠ Lütfen bir şehir seçin</span>';
+            }
+        });
+
+        // Scroll navbar
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('.navbar-staylux');
+            if (nav) nav.style.padding = window.scrollY > 50 ? '10px 0' : '16px 0';
+        });</script>
+</body>
+</html>
+

@@ -1,0 +1,836 @@
+﻿
+@{
+    Layout = null;
+}
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Tur Planlayıcı — StayLux</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --gold: #C9A84C;
+            --gold-light: #E8C96A;
+            --gold-dark: #9A7A2E;
+            --dark: #0D0D0D;
+            --dark-2: #141414;
+            --dark-3: #1E1E1E;
+            --dark-4: #2A2A2A;
+            --light: #F5F0E8;
+            --muted: #888;
+            --white: #FFFFFF;
+            --radius: 16px;
+            --ai-blue: #4F8EF7;
+            --ai-purple: #8B5CF6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--dark);
+            color: var(--light);
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 300;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 500;
+        }
+
+        /* NAVBAR */
+        .navbar-staylux {
+            background: rgba(13,13,13,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(201,168,76,0.15);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--gold) !important;
+            letter-spacing: 2px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-link-lux {
+            color: rgba(245,240,232,0.7) !important;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 6px 14px !important;
+            transition: color 0.2s;
+        }
+
+            .nav-link-lux:hover {
+                color: var(--gold) !important;
+            }
+
+        .btn-nav-cta {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: var(--dark) !important;
+            font-weight: 600 !important;
+            border-radius: 50px;
+            padding: 8px 20px !important;
+            font-size: 0.82rem !important;
+        }
+
+        /* HERO */
+        .ai-hero {
+            background: linear-gradient(135deg, #0D0D0D 0%, #0f0a1a 50%, #0D0D0D 100%);
+            border-bottom: 1px solid rgba(201,168,76,0.1);
+            padding: 48px 0 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .ai-hero::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: radial-gradient(ellipse at 30% 50%, rgba(79,142,247,0.06) 0%, transparent 60%), radial-gradient(ellipse at 70% 50%, rgba(201,168,76,0.05) 0%, transparent 60%);
+            }
+
+        .ai-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(79,142,247,0.1);
+            border: 1px solid rgba(79,142,247,0.2);
+            color: #7BB3FF;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        /* FORM CARD */
+        .form-card {
+            background: var(--dark-3);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .form-card-header {
+            background: linear-gradient(135deg, rgba(79,142,247,0.08), rgba(201,168,76,0.05));
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding: 20px 28px;
+        }
+
+        /* FORM ELEMENTS */
+        .form-label-lux {
+            color: var(--gold);
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-control-lux, .form-select-lux {
+            background: rgba(255,255,255,0.04) !important;
+            border: 1px solid rgba(201,168,76,0.15) !important;
+            color: var(--light) !important;
+            border-radius: 12px !important;
+            padding: 12px 16px !important;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+            .form-control-lux:focus, .form-select-lux:focus {
+                background: rgba(201,168,76,0.05) !important;
+                border-color: rgba(201,168,76,0.5) !important;
+                box-shadow: 0 0 0 3px rgba(201,168,76,0.1) !important;
+                outline: none;
+            }
+
+            .form-control-lux::placeholder {
+                color: rgba(245,240,232,0.25) !important;
+            }
+
+            .form-select-lux option {
+                background: #1a1a1a;
+            }
+
+        /* TEXTAREA */
+        .textarea-lux {
+            background: rgba(255,255,255,0.03) !important;
+            border: 1px solid rgba(255,255,255,0.08) !important;
+            color: var(--light) !important;
+            border-radius: 14px !important;
+            padding: 16px !important;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            resize: vertical;
+            transition: all 0.3s;
+            min-height: 120px;
+        }
+
+            .textarea-lux:focus {
+                background: rgba(79,142,247,0.04) !important;
+                border-color: rgba(79,142,247,0.3) !important;
+                box-shadow: 0 0 0 3px rgba(79,142,247,0.08) !important;
+                outline: none;
+            }
+
+            .textarea-lux::placeholder {
+                color: rgba(245,240,232,0.2) !important;
+            }
+
+        /* AI OUTPUT TEXTAREA */
+        .textarea-ai {
+            background: rgba(79,142,247,0.04) !important;
+            border: 1px solid rgba(79,142,247,0.15) !important;
+            color: var(--white) !important; /* ← ekle */
+            border-radius: 14px !important;
+            padding: 20px !important;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.88rem;
+            line-height: 1.8;
+            resize: vertical;
+            min-height: 400px;
+        }
+            .textarea-ai:read-only {
+                color: var(--white) !important;
+                opacity: 1 !important;
+                -webkit-text-fill-color: var(--white) !important;
+            }
+        /* DIVIDER */
+        .ai-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 24px 0;
+        }
+
+        .ai-divider-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(79,142,247,0.2), transparent);
+        }
+
+        .ai-divider-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(79,142,247,0.1);
+            border: 1px solid rgba(79,142,247,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* BUTTONS */
+        .btn-ai {
+            background: linear-gradient(135deg, #4F8EF7, #7C3AED);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            padding: 14px 32px;
+            font-weight: 600;
+            font-size: 0.92rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .btn-ai:hover {
+                box-shadow: 0 12px 30px rgba(79,142,247,0.35);
+                transform: translateY(-2px);
+            }
+
+            .btn-ai:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+                transform: none;
+            }
+
+            .btn-ai .btn-shine {
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 60%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+                transition: left 0.5s;
+            }
+
+            .btn-ai:hover .btn-shine {
+                left: 150%;
+            }
+
+        .btn-copy {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--muted);
+            border-radius: 10px;
+            padding: 8px 16px;
+            font-size: 0.78rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+            .btn-copy:hover {
+                border-color: rgba(201,168,76,0.3);
+                color: var(--gold);
+            }
+
+        /* AI TYPING ANIMATION */
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--ai-blue);
+            border-radius: 50%;
+            animation: typingBounce 1.2s infinite;
+        }
+
+            .typing-dot:nth-child(2) {
+                animation-delay: 0.2s;
+            }
+
+            .typing-dot:nth-child(3) {
+                animation-delay: 0.4s;
+            }
+
+        @@keyframes typingBounce {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.4;
+            }
+
+            30% {
+                transform: translateY(-8px);
+                opacity: 1;
+            }
+        }
+
+        /* AI RESPONSE */
+        .ai-response-wrap {
+            position: relative;
+        }
+
+        .ai-response-label {
+            font-size: 0.7rem;
+            color: #7BB3FF;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .ai-response-label::before {
+                content: '';
+                width: 6px;
+                height: 6px;
+                background: #4F8EF7;
+                border-radius: 50%;
+                animation: pulse 2s infinite;
+            }
+
+        @@keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        /* DAY TAGS */
+        .day-tag {
+            background: rgba(79,142,247,0.1);
+            border: 1px solid rgba(79,142,247,0.2);
+            color: #7BB3FF;
+            font-size: 0.75rem;
+            padding: 4px 12px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-right: 6px;
+            margin-bottom: 6px;
+        }
+
+        /* INTEREST CHIPS */
+        .interest-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chip {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: rgba(245,240,232,0.55);
+            font-size: 0.78rem;
+            padding: 6px 14px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+            .chip:hover {
+                background: rgba(79,142,247,0.08);
+                border-color: rgba(79,142,247,0.25);
+                color: #7BB3FF;
+            }
+
+            .chip.active {
+                background: rgba(79,142,247,0.15);
+                border-color: rgba(79,142,247,0.4);
+                color: #7BB3FF;
+            }
+
+        /* INFO CARD */
+        .info-card {
+            background: rgba(79,142,247,0.05);
+            border: 1px solid rgba(79,142,247,0.12);
+            border-radius: 14px;
+            padding: 16px 20px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold-dark);
+            border-radius: 3px;
+        }
+
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.5s ease both;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar-staylux">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-between w-100">
+                <a href="/" class="navbar-brand-logo">
+                    <div class="logo-icon"><i class="fas fa-gem text-dark" style="font-size:0.9rem;"></i></div>
+                    StayLux
+                </a>
+                <ul class="nav d-none d-lg-flex align-items-center gap-1">
+                    <li><a href="/Hotel/Index" class="nav-link">Keşfet</a></li>
+                    <li><a href="/Hotel/Search/" class="nav-link">Destinasyonlar</a></li>
+                    <li><a href="/AI/Index/" class="nav-link">Tur Oluştur</a></li>
+                    <li><a href="/About/Index/" class="nav-link">Hakkımızda</a></li>
+                    <li><a href="#" class="nav-link btn-nav-cta ms-2">Giriş Yap</a></li>
+                </ul>
+                <button class="btn d-lg-none" style="color:var(--gold);font-size:1.3rem;"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <div class="ai-hero">
+        <div class="container" style="position:relative; z-index:1;">
+            <div class="ai-badge"><i class="fas fa-robot" style="font-size:0.7rem;"></i> Yapay Zeka Destekli</div>
+            <h1 style="font-size:clamp(2rem,4vw,3.2rem); color:var(--white); margin-bottom:10px;">
+                Kişisel <span style="color:var(--gold);">Tur Planlayıcınız</span>
+            </h1>
+            <p style="color:rgba(245,240,232,0.5); font-size:0.95rem; max-width:520px; line-height:1.7;">
+                Seyahat bilgilerinizi girin, yapay zeka size gün gün detaylı bir tur programı hazırlasın.
+            </p>
+        </div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="container" style="padding: 40px 0 80px;">
+        <div class="row g-4" style="align-items:flex-start;">
+            
+                <!-- SOL: FORM -->
+            <div class="col-lg-5">
+                <form asp-action="Index" asp-controller="AI" method="post">
+                    <div class="form-card fade-in">
+                        <div class="form-card-header">
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <div style="width:36px; height:36px; background:rgba(79,142,247,0.15); border:1px solid rgba(79,142,247,0.25); border-radius:10px; display:flex; align-items:center; justify-content:center;">
+                                    <i class="fas fa-map-marked-alt" style="color:#7BB3FF; font-size:0.9rem;"></i>
+                                </div>
+                                <div>
+                                    <div style="font-size:1rem; color:var(--white); font-weight:500;">Tur Bilgileri</div>
+                                    <div style="font-size:0.72rem; color:var(--muted);">Detayları doldurun, AI planınızı oluştursun</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="padding: 24px;">
+
+                            <!-- Gidilecek Şehir -->
+                            <div class="mb-4">
+                                <label class="form-label-lux"><i class="fas fa-map-marker-alt" style="font-size:0.6rem;"></i> Gidilecek Şehir / Ülke</label>
+                                <input type="text" name="city" class="form-control-lux form-control" id="tourDestination" placeholder="ör: Paris, Fransa" />
+                            </div>
+
+                            <!-- Yaşadığınız Şehir -->
+                            <div class="mb-4">
+                                <label class="form-label-lux"><i class="fas fa-home" style="font-size:0.6rem;"></i> Yaşadığınız Şehir</label>
+                                <input type="text" name="myCity" class="form-control-lux form-control" id="tourOrigin" placeholder="ör: İstanbul, Türkiye" />
+                            </div>
+
+                            <!-- Tarihler -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-6">
+                                    <label class="form-label-lux"><i class="fas fa-calendar" style="font-size:0.6rem;"></i> Giriş Tarihi</label>
+                                    <input type="date" name="enctranceDate" class="form-control-lux form-control" id="tourCheckIn" />
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label-lux"><i class="fas fa-calendar-check" style="font-size:0.6rem;"></i> Çıkış Tarihi</label>
+                                    <input type="date" name="exitDate" class="form-control-lux form-control" id="tourCheckOut" />
+                                </div>
+                            </div>
+
+                            <!-- Kişi Sayısı -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-6">
+                                    <label class="form-label-lux"><i class="fas fa-user" style="font-size:0.6rem;"></i> Yetişkin</label>
+                                    <select class="form-select-lux form-select" id="tourAdults" name="childirenCount">
+                                        <option value="1">1 Yetişkin</option>
+                                        <option value="2" selected>2 Yetişkin</option>
+                                        <option value="3">3 Yetişkin</option>
+                                        <option value="4">4 Yetişkin</option>
+                                        <option value="5">5+ Yetişkin</option>
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label-lux"><i class="fas fa-child" style="font-size:0.6rem;"></i> Çocuk</label>
+                                    <select class="form-select-lux form-select" id="tourChildren" name="adultCount">
+                                        <option value="0" selected>Çocuk Yok</option>
+                                        <option value="1">1 Çocuk</option>
+                                        <option value="2">2 Çocuk</option>
+                                        <option value="3">3 Çocuk</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Bütçe -->
+                            <div class="mb-4">
+                                <label class="form-label-lux"><i class="fas fa-wallet" style="font-size:0.6rem;"></i> Bütçe</label>
+                                <select class="form-select-lux form-select" id="tourBudget" name="type">
+                                    <option value="ekonomik">💰 Ekonomik</option>
+                                    <option value="orta" selected>💳 Orta Bütçe</option>
+                                    <option value="lüks">💎 Lüks</option>
+                                    <option value="ultra-lüks">🏆 Ultra Lüks</option>
+                                </select>
+                            </div>
+
+                            <!-- İlgi Alanları -->
+                            <div class="mb-4">
+                                <label class="form-label-lux"><i class="fas fa-heart" style="font-size:0.6rem;"></i> İlgi Alanları</label>
+                                <div class="interest-chips" id="interestChips">
+                                    <span class="chip" onclick="toggleChip(this)">🏛️ Tarih & Kültür</span>
+                                    <span class="chip" onclick="toggleChip(this)">🍽️ Gastronomi</span>
+                                    <span class="chip" onclick="toggleChip(this)">🛍️ Alışveriş</span>
+                                    <span class="chip" onclick="toggleChip(this)">🌿 Doğa</span>
+                                    <span class="chip" onclick="toggleChip(this)">🎭 Sanat & Müze</span>
+                                    <span class="chip" onclick="toggleChip(this)">🎉 Gece Hayatı</span>
+                                    <span class="chip" onclick="toggleChip(this)">⛵ Su Sporları</span>
+                                    <span class="chip" onclick="toggleChip(this)">🏔️ Macera</span>
+                                    <span class="chip" onclick="toggleChip(this)">💆 Spa & Dinlenme</span>
+                                    <span class="chip" onclick="toggleChip(this)">👨‍👩‍👧 Aile Dostu</span>
+                                </div>
+                            </div>
+
+                            <!-- Ek Notlar -->
+                            <div class="mb-4">
+                                <label class="form-label-lux"><i class="fas fa-sticky-note" style="font-size:0.6rem;"></i> Ek Notlar / Özel İstekler</label>
+                                <textarea class="textarea-lux form-control" id="tourNotes" name="notes"
+                                          placeholder="ör: Vejetaryenim, yüksek irtifadan korkuyorum, romantik bir balayı gezisi planlamak istiyoruz..."></textarea>
+                            </div>
+
+                            <!-- AI Butonu -->
+                            <button type="submit" class="btn-ai w-100">
+                                <i class="fas fa-magic"></i> Tur Planımı Oluştur
+                            </button>
+
+                            <!-- Info -->
+                            <div class="info-card mt-3">
+                                <div style="font-size:0.78rem; color:rgba(79,142,247,0.8); display:flex; align-items:flex-start; gap:8px;">
+                                    <i class="fas fa-info-circle" style="margin-top:2px; flex-shrink:0;"></i>
+                                    <span>Yapay zeka, girdiğiniz bilgilere göre gün gün detaylı bir tur programı oluşturacak. Bu birkaç saniye sürebilir.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+           
+            <!-- SAĞ: AI ÇIKTI -->
+            <!-- SAĞ: AI ÇIKTI -->
+            <div class="col-lg-7">
+                <div>
+                    <!-- Başlık -->
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+                        <div>
+                            <div class="ai-response-label" id="aiStatusLabel">
+                                @(ViewBag.receipe != null ? "Planınız Hazır ✓" : "AI Yanıtı Bekleniyor")
+                            </div>
+                            <h2 style="font-size:1.5rem; color:var(--white);">Tur <span style="color:var(--gold);">Programınız</span></h2>
+                        </div>
+                    </div>
+
+                    <!-- Output textarea -->
+                    <textarea class="textarea-ai form-control" id="tourOutput" readonly
+                              style="min-height:500px;"
+                              placeholder="&#9679; Soldaki formu doldurun ve 'Tur Planımı Oluştur' butonuna tıklayın.
+
+AI asistanınız size şunları hazırlayacak:
+
+📅 Gün gün detaylı program
+🗺️ Gezilecek yerler ve sırası
+🍽️ Önerilen restoranlar
+🚌 Ulaşım önerileri
+💡 Yerel ipuçları ve tavsiyeler">@ViewBag.receipe</textarea>
+
+                    @if (ViewBag.receipe != null)
+                    {
+                        <div style="margin-top:16px;" class="d-flex gap-3 flex-wrap">
+                            <button class="btn-copy" onclick="copyPlan()">
+                                <i class="fas fa-copy"></i> Planı Kopyala
+                            </button>
+                            <button class="btn-copy" onclick="downloadPlan()">
+                                <i class="fas fa-download"></i> İndir
+                            </button>
+                            <a href="/Hotel/Search" class="btn-copy" style="text-decoration:none;">
+                                <i class="fas fa-hotel"></i> Otel Ara
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+            <
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // İlgi alanı chip toggle
+        function toggleChip(el) {
+            el.classList.toggle('active');
+        }
+
+        // Seçili ilgi alanlarını al
+        function getSelectedInterests() {
+            return Array.from(document.querySelectorAll('.chip.active'))
+                .map(c => c.textContent.trim()).join(', ');
+        }
+
+        // Gün sayısını hesapla
+        function calculateDays() {
+            const ci = document.getElementById('tourCheckIn').value;
+            const co = document.getElementById('tourCheckOut').value;
+            if (!ci || !co) return null;
+            const diff = (new Date(co) - new Date(ci)) / (1000 * 60 * 60 * 24);
+            return diff > 0 ? diff : null;
+        }
+
+        // AI Tur Planı Oluştur
+        async function generateTourPlan() {
+            const destination = document.getElementById('tourDestination').value.trim();
+            const origin = document.getElementById('tourOrigin').value.trim();
+            const checkIn = document.getElementById('tourCheckIn').value;
+            const checkOut = document.getElementById('tourCheckOut').value;
+            const adults = document.getElementById('tourAdults').value;
+            const children = document.getElementById('tourChildren').value;
+            const budget = document.getElementById('tourBudget').value;
+            const notes = document.getElementById('tourNotes').value.trim();
+            const interests = getSelectedInterests();
+            const days = calculateDays();
+
+            if (!destination) { alert('Lütfen gidilecek şehri girin.'); return; }
+            if (!checkIn || !checkOut) { alert('Lütfen giriş ve çıkış tarihlerini seçin.'); return; }
+            if (!days || days <= 0) { alert('Çıkış tarihi giriş tarihinden sonra olmalıdır.'); return; }
+
+            // UI güncelle
+            const btn = document.getElementById('planBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Hazırlanıyor...';
+
+            document.getElementById('typingIndicator').style.display = 'flex';
+            document.getElementById('tourOutput').value = '';
+            document.getElementById('actionButtons').style.display = 'none';
+            document.getElementById('copyBtn').style.display = 'none';
+            document.getElementById('aiStatusLabel').textContent = 'AI Planı Hazırlıyor...';
+
+            // Prompt oluştur
+            const prompt = `Sen deneyimli bir seyahat rehberisin. Aşağıdaki bilgilere göre Türkçe olarak gün gün detaylı bir tur programı hazırla:
+
+🌍 Gidilecek Yer: ${destination}
+🏠 Nereden Gidiyor: ${origin || 'Belirtilmedi'}
+📅 Giriş Tarihi: ${checkIn}
+📅 Çıkış Tarihi: ${checkOut}
+🗓️ Toplam Süre: ${days} gün
+👥 Kişi Sayısı: ${adults} yetişkin, ${children} çocuk
+💰 Bütçe: ${budget}
+❤️ İlgi Alanları: ${interests || 'Genel'}
+📝 Özel İstekler: ${notes || 'Yok'}
+
+Lütfen şu formatta hazırla:
+
+🗺️ GENEL BAKIŞ
+[Destinasyon hakkında kısa bilgi ve bu tur için öneriler]
+
+${Array.from({ length: days }, (_, i) => `📅 GÜN ${i + 1}
+[O günün tarihi]
+🌅 Sabah: [Aktivite ve detayları]
+🌞 Öğle: [Aktivite + önerilen restoran]
+🌆 Öğleden Sonra: [Aktivite ve detayları]
+🌙 Akşam: [Aktivite + önerilen restoran/eğlence]
+💡 İpucu: [O güne özel tavsiye]`).join('\n\n')}
+
+💼 GENEL TAVSİYELER
+[Ulaşım, konaklama, para birimi, güvenlik vb.]
+
+💰 TAHMİNİ BÜTÇE
+[Kişi başı günlük tahmini harcama]`;
+
+            try {
+                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: 'claude-sonnet-4-20250514',
+                        max_tokens: 1000,
+                        messages: [{ role: 'user', content: prompt }]
+                    })
+                });
+
+                const data = await response.json();
+                const text = data.content?.[0]?.text || 'Yanıt alınamadı.';
+
+                document.getElementById('typingIndicator').style.display = 'none';
+                document.getElementById('tourOutput').value = text;
+                document.getElementById('actionButtons').style.display = 'block';
+                document.getElementById('copyBtn').style.display = 'inline-flex';
+                document.getElementById('aiStatusLabel').textContent = 'Planınız Hazır ✓';
+
+            } catch (err) {
+                document.getElementById('typingIndicator').style.display = 'none';
+                document.getElementById('tourOutput').value = 'Hata oluştu: ' + err.message;
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-magic"></i> Tur Planımı Oluştur';
+        }
+
+        function copyPlan() {
+            const text = document.getElementById('tourOutput').value;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = event.target.closest('button');
+                btn.innerHTML = '<i class="fas fa-check"></i> Kopyalandı!';
+                setTimeout(() => btn.innerHTML = '<i class="fas fa-copy"></i> Kopyala', 2000);
+            });
+        }
+
+        function downloadPlan() {
+            const text = document.getElementById('tourOutput').value;
+            const dest = document.getElementById('tourDestination').value || 'tur-plani';
+            const blob = new Blob([text], { type: 'text/plain; charset=utf-8' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `${dest}-tur-plani.txt`;
+            a.click();
+        }
+
+        function regeneratePlan() {
+            document.getElementById('tourOutput').value = '';
+            generateTourPlan();
+        }
+
+        // Default tarihler
+        window.addEventListener('DOMContentLoaded', () => {
+            const today = new Date();
+            const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
+            const nextWeek = new Date(today); nextWeek.setDate(today.getDate() + 7);
+            const fmt = d => d.toISOString().split('T')[0];
+            document.getElementById('tourCheckIn').value = fmt(tomorrow);
+            document.getElementById('tourCheckOut').value = fmt(nextWeek);
+            document.getElementById('tourCheckIn').min = fmt(today);
+        });
+
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('.navbar-staylux');
+            if (nav) nav.style.padding = window.scrollY > 50 ? '10px 0' : '16px 0';
+        });
+    </script>
+</body>
+</html>

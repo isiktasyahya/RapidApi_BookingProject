@@ -1,0 +1,1007 @@
+﻿@model RapidApi_BookingProject.Dtos.HotelDetailDataDto
+@{
+    Layout = null;
+    var photos = Model?.Rooms?
+     .SelectMany(r => r.Value.Photos ?? new List<RapidApi_BookingProject.Dtos.HotelRoomPhotoDto>())
+     .Select(p => p.Url_Max1280 ?? p.Url_Max750 ?? p.Url_Original)
+     .Where(u => !string.IsNullOrEmpty(u))
+     .ToList() ?? new List<string>();
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@(Model?.Hotel_Name ?? "Otel Detayı") — StayLux</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --gold: #C9A84C;
+            --gold-light: #E8C96A;
+            --gold-dark: #9A7A2E;
+            --dark: #0D0D0D;
+            --dark-2: #141414;
+            --dark-3: #1E1E1E;
+            --dark-4: #2A2A2A;
+            --light: #F5F0E8;
+            --muted: #888;
+            --white: #FFFFFF;
+            --radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--dark);
+            color: var(--light);
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 300;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 500;
+        }
+
+        /* NAVBAR */
+        .navbar-staylux {
+            background: rgba(13,13,13,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(201,168,76,0.15);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--gold) !important;
+            letter-spacing: 2px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-back {
+            background: transparent;
+            border: 1px solid rgba(201,168,76,0.35);
+            color: var(--gold);
+            border-radius: 10px;
+            padding: 8px 20px;
+            font-size: 0.82rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+        }
+
+            .btn-back:hover {
+                background: var(--gold);
+                color: var(--dark);
+            }
+
+        /* BREADCRUMB */
+        .breadcrumb-bar {
+            background: var(--dark-2);
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .breadcrumb {
+            margin: 0;
+        }
+
+        .breadcrumb-item {
+            color: var(--muted);
+            font-size: 0.82rem;
+        }
+
+            .breadcrumb-item a {
+                color: var(--gold);
+                text-decoration: none;
+            }
+
+            .breadcrumb-item.active {
+                color: var(--light);
+            }
+
+            .breadcrumb-item + .breadcrumb-item::before {
+                color: rgba(255,255,255,0.2);
+            }
+
+        /* PHOTO GALLERY */
+        .gallery-section {
+            position: relative;
+            background: #000;
+        }
+
+        .gallery-main {
+            position: relative;
+            height: 650px; /* 480px yerine 650px */
+            overflow: hidden;
+            background: #000;
+        }
+
+            .gallery-main img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: center center; /* ← ortalanmış göster */
+                transition: opacity 0.3s ease;
+            }
+
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(201,168,76,0.3);
+            color: var(--gold);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            z-index: 10;
+        }
+
+            .gallery-nav:hover {
+                background: var(--gold);
+                color: var(--dark);
+            }
+
+            .gallery-nav.prev {
+                left: 20px;
+            }
+
+            .gallery-nav.next {
+                right: 20px;
+            }
+
+        .gallery-counter {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            color: var(--light);
+            font-size: 0.82rem;
+            padding: 6px 14px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .gallery-hotel-info {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            padding: 12px 20px;
+            border-radius: 14px;
+            border: 1px solid rgba(201,168,76,0.2);
+        }
+
+        .gallery-thumbs {
+            display: flex;
+            gap: 8px;
+            padding: 12px 16px;
+            background: var(--dark-2);
+            overflow-x: auto;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+            .gallery-thumbs::-webkit-scrollbar {
+                height: 4px;
+            }
+
+            .gallery-thumbs::-webkit-scrollbar-thumb {
+                background: var(--gold-dark);
+                border-radius: 2px;
+            }
+
+        .thumb {
+            flex: 0 0 auto;
+            width: 90px;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+            .thumb img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            .thumb.active {
+                border-color: var(--gold);
+            }
+
+            .thumb:hover {
+                border-color: rgba(201,168,76,0.5);
+            }
+
+        /* CONTENT */
+        .detail-content {
+            padding: 40px 0 80px;
+        }
+
+        .content-card {
+            background: var(--dark-3);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .content-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 2px;
+                background: linear-gradient(90deg, transparent, rgba(201,168,76,0.4), transparent);
+            }
+
+        .card-title {
+            font-size: 1.2rem;
+            color: var(--white);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .card-title i {
+                color: var(--gold);
+            }
+
+        /* INFO GRID */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
+        }
+
+        .info-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 12px;
+            padding: 14px;
+        }
+
+        .info-label {
+            font-size: 0.68rem;
+            color: var(--gold);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .info-value {
+            font-size: 0.9rem;
+            color: var(--light);
+            font-weight: 500;
+        }
+
+        /* HIGHLIGHTS */
+        .highlight-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .highlight-tag {
+            background: rgba(201,168,76,0.08);
+            border: 1px solid rgba(201,168,76,0.2);
+            color: var(--gold-light);
+            font-size: 0.8rem;
+            padding: 8px 16px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* FACILITIES */
+        .facility-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .facility-tag {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: rgba(245,240,232,0.65);
+            font-size: 0.78rem;
+            padding: 7px 14px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+            .facility-tag:hover {
+                background: rgba(201,168,76,0.08);
+                border-color: rgba(201,168,76,0.25);
+                color: var(--light);
+            }
+
+            .facility-tag i {
+                color: var(--gold);
+                font-size: 0.65rem;
+            }
+
+        /* DESCRIPTION */
+        .room-description {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 0.88rem;
+            color: rgba(245,240,232,0.7);
+            line-height: 1.7;
+        }
+
+        /* KONUM */
+        .map-placeholder {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        /* PRICE SIDEBAR */
+        .price-sidebar {
+            position: sticky;
+            top: 90px;
+        }
+
+        .price-card {
+            background: var(--dark-3);
+            border: 1px solid rgba(201,168,76,0.2);
+            border-radius: var(--radius);
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .price-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 2px;
+                background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-dark));
+            }
+
+        .price-display {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.8rem;
+            font-weight: 600;
+            color: var(--gold);
+            line-height: 1;
+        }
+
+        .price-note {
+            font-size: 0.78rem;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        .divider-gold {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(201,168,76,0.25), transparent);
+            margin: 20px 0;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.83rem;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: rgba(245,240,232,0.65);
+        }
+
+            .info-row:last-of-type {
+                border-bottom: none;
+            }
+
+            .info-row span:last-child {
+                color: var(--light);
+                font-weight: 500;
+            }
+
+        .btn-reserve {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: var(--dark);
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            font-weight: 700;
+            font-size: 0.92rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+            .btn-reserve:hover {
+                box-shadow: 0 12px 30px rgba(201,168,76,0.4);
+                transform: translateY(-2px);
+            }
+
+        /* BADGE */
+        .tag-lux {
+            background: rgba(201,168,76,0.1);
+            border: 1px solid rgba(201,168,76,0.25);
+            color: var(--gold-light);
+            font-size: 0.75rem;
+            padding: 4px 12px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* BREAKFAST BADGE */
+        .breakfast-badge {
+            background: rgba(74,222,128,0.1);
+            border: 1px solid rgba(74,222,128,0.25);
+            color: #4ade80;
+            font-size: 0.78rem;
+            padding: 6px 14px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* FOOTER */
+        .footer-mini {
+            background: var(--dark-2);
+            border-top: 1px solid rgba(201,168,76,0.1);
+            padding: 24px 0;
+            margin-top: 40px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold-dark);
+            border-radius: 3px;
+        }
+
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.4s ease both;
+        }
+
+        @@media (max-width: 991px) {
+            .price-sidebar {
+                position: static;
+            }
+
+            .gallery-main {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar-staylux">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-between w-100">
+                <a href="/" class="navbar-brand-logo">
+                    <div class="logo-icon"><i class="fas fa-gem text-dark" style="font-size:0.9rem;"></i></div>
+                    StayLux
+                </a>
+                <ul class="nav d-none d-lg-flex align-items-center gap-1">
+                    <li><a href="/Hotel/Index" class="nav-link">Keşfet</a></li>
+                    <li><a href="/Hotel/Search/" class="nav-link">Destinasyonlar</a></li>
+                    <li><a href="/AI/Index/" class="nav-link">Tur Oluştur</a></li>
+                    <li><a href="/About/Index/" class="nav-link">Hakkımızda</a></li>
+                    <li><a href="#" class="nav-link btn-nav-cta ms-2">Giriş Yap</a></li>
+                </ul>
+                <button class="btn d-lg-none" style="color:var(--gold);font-size:1.3rem;"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- BREADCRUMB -->
+    <div class="breadcrumb-bar">
+        <div class="container">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="/Hotel/Index/">Ana Sayfa</a></li>
+                <li class="breadcrumb-item"><a href="javascript:history.back()">Sonuçlar</a></li>
+                <li class="breadcrumb-item active">@(Model?.Hotel_Name ?? "Otel Detayı")</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- FOTOĞRAF GALERİSİ -->
+    <div class="gallery-section">
+        @if (photos.Any())
+        {
+            <div class="gallery-main" id="galleryMain">
+                <img id="mainPhoto" src="@photos[0]" alt="@Model?.Hotel_Name" />
+
+                <!-- Hotel Info Overlay -->
+                <div class="gallery-hotel-info">
+                    <div class="d-flex gap-2 mb-2">
+                        <span class="tag-lux"><i class="fas fa-star" style="font-size:0.6rem;"></i> @(Model?.Accommodation_Type_Name ?? "Otel")</span>
+                        @if (!string.IsNullOrEmpty(Model?.City))
+                        {
+                            <span class="tag-lux"><i class="fas fa-map-marker-alt" style="font-size:0.6rem;"></i> @Model.City</span>
+                        }
+                    </div>
+                    <div style="font-family:'Cormorant Garamond',serif; font-size:1.6rem; color:var(--white); font-weight:600;">
+                        @Model?.Hotel_Name
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model?.Address))
+                    {
+                        <div style="font-size:0.8rem; color:rgba(245,240,232,0.7); margin-top:4px;">
+                            <i class="fas fa-map-marker-alt" style="color:var(--gold);"></i> @Model.Address
+                        </div>
+                    }
+                    @if (Model?.Review_Score.HasValue == true)
+                    {
+                        <div style="margin-top:8px;">
+                            <span style="background:linear-gradient(135deg,var(--gold),var(--gold-dark)); color:var(--dark); font-weight:700; padding:4px 12px; border-radius:8px; font-size:0.9rem;">
+                                ★ @Model.Review_Score.Value.ToString("0.0")
+                            </span>
+                            @if (Model?.Review_Nr.HasValue == true)
+                            {
+                                <span style="font-size:0.78rem; color:rgba(245,240,232,0.6); margin-left:8px;">@Model.Review_Nr yorum</span>
+                            }
+                        </div>
+                    }
+                </div>
+
+                <!-- Nav Buttons -->
+                <button class="gallery-nav prev" onclick="changePhoto(-1)"><i class="fas fa-chevron-left"></i></button>
+                <button class="gallery-nav next" onclick="changePhoto(1)"><i class="fas fa-chevron-right"></i></button>
+
+                <!-- Counter -->
+                <div class="gallery-counter">
+                    <span id="photoIndex">1</span> / @photos.Count
+                </div>
+            </div>
+
+            <!-- Thumbnails -->
+            <div class="gallery-thumbs" id="galleryThumbs">
+                @for (int i = 0; i < photos.Count; i++)
+                {
+                    <div class="thumb @(i == 0 ? "active" : "")" onclick="goToPhoto(@i)">
+                        <img src="@photos[i]" alt="Fotoğraf @(i+1)" loading="lazy" />
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <!-- Fallback -->
+            <div style="height:300px; background:var(--dark-3); display:flex; align-items:center; justify-content:center;">
+                <div style="text-align:center;">
+                    <i class="fas fa-image" style="font-size:3rem; color:var(--muted);"></i>
+                    <div style="color:var(--muted); margin-top:12px;">Fotoğraf bulunamadı</div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="detail-content">
+        <div class="container">
+            <div class="row g-4">
+
+                <!-- Sol: Detaylar -->
+                <div class="col-lg-8">
+
+                    <!-- Öne Çıkan Özellikler -->
+                    @if (Model?.Property_Highlight_Strip != null && Model.Property_Highlight_Strip.Any())
+                    {
+                        <div class="content-card fade-in">
+                            <div class="card-title"><i class="fas fa-star"></i> Öne Çıkan Özellikler</div>
+                            <div class="highlight-grid">
+                                @foreach (var h in Model.Property_Highlight_Strip)
+                                {
+                                    <span class="highlight-tag">
+                                        <i class="fas fa-check-circle" style="font-size:0.7rem;"></i>
+                                        @h.Name
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Genel Bilgiler -->
+                    <div class="content-card fade-in">
+                        <div class="card-title"><i class="fas fa-info-circle"></i> Genel Bilgiler</div>
+                        <div class="info-grid">
+                            @if (!string.IsNullOrEmpty(Model?.Hotel_Name))
+                            {
+                                <div class="info-item">
+                                    <div class="info-label">Otel Adı</div>
+                                    <div class="info-value">@Model.Hotel_Name</div>
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(Model?.City))
+                            {
+                                <div class="info-item">
+                                    <div class="info-label">Şehir</div>
+                                    <div class="info-value">@Model.City</div>
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(Model?.District))
+                            {
+                                <div class="info-item">
+                                    <div class="info-label">Semt</div>
+                                    <div class="info-value">@Model.District</div>
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(Model?.Country_Trans))
+                            {
+                                <div class="info-item">
+                                    <div class="info-label">Ülke</div>
+                                    <div class="info-value">@Model.Country_Trans</div>
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(Model?.Address))
+                            {
+                                <div class="info-item">
+                                    <div class="info-label">Adres</div>
+                                    <div class="info-value">@Model.Address</div>
+                                </div>
+                            }
+                            @if (Model?.Review_Score.HasValue == true)
+                            {
+                                <div class="info-item">
+                                    <div class="info-label">Puan</div>
+                                    <div class="info-value" style="color:var(--gold);">★ @Model.Review_Score.Value.ToString("0.0")</div>
+                                </div>
+                            }
+                            @if (Model?.Review_Nr.HasValue == true)
+                            {
+                                <div class="info-item">
+                                    <div class="info-label">Yorum Sayısı</div>
+                                    <div class="info-value">@Model.Review_Nr</div>
+                                </div>
+                            }
+                            @if (Model?.Available_Rooms.HasValue == true)
+                            {
+                                <div class="info-item">
+                                    <div class="info-label">Müsait Oda</div>
+                                    <div class="info-value">@Model.Available_Rooms oda</div>
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(Model?.Accommodation_Type_Name))
+                            {
+                                <div class="info-item">
+                                    <div class="info-label">Konaklama Tipi</div>
+                                    <div class="info-value">@Model.Accommodation_Type_Name</div>
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(Model?.Currency_Code))
+                            {
+                                <div class="info-item">
+                                    <div class="info-label">Para Birimi</div>
+                                    <div class="info-value">@Model.Currency_Code</div>
+                                </div>
+                            }
+                        </div>
+
+                        @if (Model?.Hotel_Include_Breakfast == 1)
+                        {
+                            <div class="mt-3">
+                                <span class="breakfast-badge">
+                                    <i class="fas fa-coffee"></i> Kahvaltı Dahil
+                                </span>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Popüler Olanaklar -->
+                    @if (Model?.Facilities_Block?.Facilities != null && Model.Facilities_Block.Facilities.Any())
+                    {
+                        <div class="content-card fade-in">
+                            <div class="card-title"><i class="fas fa-concierge-bell"></i> @(Model.Facilities_Block.Name ?? "Popüler Olanaklar")</div>
+                            <div class="facility-grid">
+                                @foreach (var f in Model.Facilities_Block.Facilities)
+                                {
+                                    <span class="facility-tag"><i class="fas fa-check"></i> @Tr(f.Name)</span>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Aile Olanakları -->
+                    @if (Model?.Family_Facilities != null && Model.Family_Facilities.Any())
+                    {
+                        <div class="content-card fade-in">
+                            <div class="card-title"><i class="fas fa-child"></i> Aile Olanakları</div>
+                            <div class="facility-grid">
+                                @foreach (var f in Model.Family_Facilities)
+                                {
+                                    <span class="facility-tag">
+                                        <i class="fas fa-check"></i> @f
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Oda Açıklamaları -->
+                    @if (Model?.Rooms != null && Model.Rooms.Any())
+                    {
+                        <div class="content-card fade-in">
+                            <div class="card-title"><i class="fas fa-bed"></i> Oda Bilgileri</div>
+                            @foreach (var room in Model.Rooms.Take(3))
+                            {
+                                @if (!string.IsNullOrEmpty(room.Value.Description))
+                                {
+                                    <div class="room-description mb-3">
+                                        <i class="fas fa-door-open" style="color:var(--gold); margin-right:8px;"></i>
+                                        @room.Value.Description
+                                    </div>
+                                }
+                            }
+                        </div>
+                    }
+
+                    <!-- Konum -->
+                    <!-- Konum -->
+                    @if (Model?.Latitude.HasValue == true && Model?.Longitude.HasValue == true)
+                    {
+                        var lat = Model.Latitude.Value.ToString("0.000000", System.Globalization.CultureInfo.InvariantCulture);
+                        var lng = Model.Longitude.Value.ToString("0.000000", System.Globalization.CultureInfo.InvariantCulture);
+                        var mapUrl = $"https://maps.google.com/maps?q={lat},{lng}&z=16&output=embed";
+                        var mapsLink = $"https://maps.google.com/?q={lat},{lng}";
+
+                        <div class="content-card fade-in">
+                            <div class="card-title"><i class="fas fa-map"></i> Konum</div>
+                            <div style="border-radius:12px; overflow:hidden; height:350px;">
+                                <iframe src="@mapUrl"
+                                        width="100%"
+                                        height="100%"
+                                        frameborder="0"
+                                        style="border:0;"
+                                        allowfullscreen
+                                        loading="lazy">
+                                </iframe>
+                            </div>
+                            @if (!string.IsNullOrEmpty(Model?.Address))
+                            {
+                                <div style="margin-top:12px; font-size:0.85rem; color:var(--muted);">
+                                    <i class="fas fa-map-marker-alt" style="color:var(--gold);"></i>
+                                    @Model.Address, @Model.City
+                                </div>
+                            }
+                            <a href="@mapsLink" target="_blank" class="btn-back mt-3 d-inline-flex">
+                                <i class="fas fa-external-link-alt"></i> Google Maps'te Aç
+                            </a>
+                        </div>
+                    }
+
+                </div>
+
+                <!-- Sağ: Fiyat & Rezervasyon -->
+                <div class="col-lg-4">
+                    <div class="price-sidebar">
+                        <div class="price-card fade-in">
+
+                            @{
+                                var price = Model?.Product_Price_Breakdown?.Gross_Amount_Per_Night
+                                         ?? Model?.Gross_Amount_Per_Night;
+                            }
+
+                            @if (price?.Value.HasValue == true)
+                            {
+                                <div class="price-display">
+                                    @price.Value.Value.ToString("N0")
+                                </div>
+                                <div class="price-note">@(price.Currency ?? Model?.Currency_Code ?? "") / gece</div>
+                            }
+                            else
+                            {
+                                <div style="font-size:1rem; color:var(--muted);">Fiyat bilgisi yok</div>
+                            }
+
+                            <div class="divider-gold"></div>
+
+                            <div class="info-row">
+                                <span><i class="fas fa-sign-in-alt" style="color:var(--gold); margin-right:6px;"></i>Giriş</span>
+                                <span>@ViewBag.ArrivalDate</span>
+                            </div>
+                            <div class="info-row">
+                                <span><i class="fas fa-sign-out-alt" style="color:var(--gold); margin-right:6px;"></i>Çıkış</span>
+                                <span>@ViewBag.DepartureDate</span>
+                            </div>
+                            <div class="info-row">
+                                <span><i class="fas fa-user" style="color:var(--gold); margin-right:6px;"></i>Yetişkin</span>
+                                <span>@ViewBag.Adults kişi</span>
+                            </div>
+
+                            <div class="divider-gold"></div>
+
+                            @if (!string.IsNullOrEmpty(Model?.Hotel_Name))
+                            {
+                                <div class="info-row">
+                                    <span>Otel</span>
+                                    <span style="max-width:160px; text-align:right; font-size:0.8rem;">@Model.Hotel_Name</span>
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(Model?.City))
+                            {
+                                <div class="info-row">
+                                    <span>Şehir</span>
+                                    <span>@Model.City</span>
+                                </div>
+                            }
+                            @if (Model?.Available_Rooms.HasValue == true)
+                            {
+                                <div class="info-row">
+                                    <span>Müsait Oda</span>
+                                    <span style="color:#4ade80;">@Model.Available_Rooms oda kaldı</span>
+                                </div>
+                            }
+                            @if (Model?.Hotel_Include_Breakfast == 1)
+                            {
+                                <div class="info-row">
+                                    <span>Kahvaltı</span>
+                                    <span style="color:#4ade80;">Dahil</span>
+                                </div>
+                            }
+
+                            <button class="btn-reserve">
+                                <i class="fas fa-lock me-2"></i> Rezervasyon Yap
+                            </button>
+
+                            <p style="text-align:center; font-size:0.72rem; color:var(--muted); margin-top:12px;">
+                                <i class="fas fa-shield-alt" style="color:var(--gold);"></i>
+                                Güvenli ödeme — SSL şifreleme
+                            </p>
+
+                            @if (photos.Any())
+                            {
+                                <div class="divider-gold"></div>
+                                <div style="font-size:0.72rem; color:var(--muted); text-align:center; margin-bottom:8px; letter-spacing:1px;">FOTOĞRAFLAR</div>
+                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                                    @foreach (var p in photos.Take(4))
+                                    {
+                                        <img src="@p" style="width:100%; height:70px; object-fit:cover; border-radius:8px;" loading="lazy" />
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer-mini">
+        <div class="container d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <span style="font-family:'Cormorant Garamond',serif; font-size:1.4rem; color:var(--gold);">✦ StayLux</span>
+            <span style="font-size:0.78rem; color:rgba(245,240,232,0.3);">© 2025 StayLux. Tüm hakları saklıdır.</span>
+            <a href="/Hotel/Index/" class="btn-back"><i class="fas fa-arrow-left" style="font-size:0.7rem;"></i> Ana Sayfaya Dön</a>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+    const photos = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(photos));
+    let currentIndex = 0;
+
+    function goToPhoto(index) {
+        currentIndex = index;
+        document.getElementById('mainPhoto').src = photos[index];
+        document.getElementById('photoIndex').textContent = index + 1;
+
+        // Thumb aktif
+        document.querySelectorAll('.thumb').forEach((t, i) => {
+            t.classList.toggle('active', i === index);
+        });
+
+        // Thumb scroll
+        const thumbs = document.querySelectorAll('.thumb');
+        if (thumbs[index]) {
+            thumbs[index].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+    }
+
+    function changePhoto(dir) {
+        let next = currentIndex + dir;
+        if (next < 0) next = photos.length - 1;
+        if (next >= photos.length) next = 0;
+        goToPhoto(next);
+    }
+
+    // Klavye desteği
+    document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowLeft') changePhoto(-1);
+        if (e.key === 'ArrowRight') changePhoto(1);
+    });
+    @functions {
+    string Tr(string en) => en switch {
+        "Free WiFi" => "Ücretsiz WiFi",
+        "Swimming pool" => "Yüzme havuzu",
+        "Airport shuttle" => "Havalimanı servisi",
+        "Non-smoking rooms" => "Sigara içilmeyen odalar",
+        "Fitness centre" => "Spor salonu",
+        "Restaurant" => "Restoran",
+        "Room service" => "Oda servisi",
+        "Spa and wellness centre" => "Spa merkezi",
+        "Free parking" => "Ücretsiz otopark",
+        "Private parking" => "Özel otopark",
+        "Family rooms" => "Aile odaları",
+        "Pets allowed" => "Evcil hayvan kabul edilir",
+        "Beachfront" => "Sahile sıfır",
+        "Air conditioning" => "Klima",
+        "Facilities for disabled guests" => "Engelli misafir olanakları",
+        _ => en  // bilinmeyenleri olduğu gibi göster
+    };
+}
+    </script>
+</body>
+</html>

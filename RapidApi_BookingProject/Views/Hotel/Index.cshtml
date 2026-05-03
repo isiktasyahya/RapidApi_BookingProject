@@ -1,0 +1,1402 @@
+﻿
+@model List<RapidApi_BookingProject.Dtos.HotelPropertyDto>
+@{
+    Layout = null;
+    ViewData["Title"] = "StayLux - Premium Hotel Booking";
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StayLux — Lüks Otel Rezervasyonu</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --gold: #C9A84C;
+            --gold-light: #E8C96A;
+            --gold-dark: #9A7A2E;
+            --dark: #0D0D0D;
+            --dark-2: #141414;
+            --dark-3: #1E1E1E;
+            --light: #F5F0E8;
+            --muted: #888;
+            --white: #FFFFFF;
+            --radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--dark);
+            color: var(--light);
+            font-family: 'DM Sans',sans-serif;
+            font-weight: 300;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Cormorant Garamond',serif;
+            font-weight: 500;
+        }
+
+        /* NAVBAR */
+        .navbar-staylux {
+            background: rgba(13,13,13,0.92);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(201,168,76,0.15);
+            padding: 18px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .navbar-brand-logo {
+            font-family: 'Cormorant Garamond',serif;
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: var(--gold) !important;
+            letter-spacing: 2px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg,var(--gold),var(--gold-dark));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .navbar-staylux .nav-link {
+            color: rgba(245,240,232,0.75) !important;
+            font-size: 0.88rem;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            font-weight: 400;
+            padding: 8px 16px !important;
+            transition: color 0.2s;
+        }
+
+            .navbar-staylux .nav-link:hover {
+                color: var(--gold) !important;
+            }
+
+        .btn-nav-cta {
+            background: linear-gradient(135deg,var(--gold),var(--gold-dark));
+            color: var(--dark) !important;
+            font-weight: 600 !important;
+            border-radius: 50px;
+            padding: 8px 24px !important;
+            font-size: 0.82rem !important;
+            letter-spacing: 1px;
+        }
+
+        /* HERO */
+        .hero-section {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.35);
+            transform: scale(1.05);
+            animation: heroZoom 20s ease-in-out infinite alternate;
+        }
+
+        @@keyframes heroZoom {
+            from {
+                transform: scale(1.05);
+            }
+
+            to {
+                transform: scale(1.12);
+            }
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(160deg,rgba(13,13,13,0.6) 0%,rgba(13,13,13,0.2) 40%,rgba(201,168,76,0.08) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 80px 0 60px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(201,168,76,0.15);
+            border: 1px solid rgba(201,168,76,0.3);
+            color: var(--gold-light);
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-size: 0.78rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 28px;
+            animation: fadeInUp 0.8s ease both;
+        }
+
+        .hero-title {
+            font-size: clamp(2.8rem,6vw,5.5rem);
+            line-height: 1.05;
+            color: var(--white);
+            margin-bottom: 20px;
+            animation: fadeInUp 0.9s 0.1s ease both;
+        }
+
+            .hero-title span {
+                color: var(--gold);
+            }
+
+        .hero-subtitle {
+            color: rgba(245,240,232,0.65);
+            font-size: 1.05rem;
+            max-width: 500px;
+            margin-bottom: 48px;
+            line-height: 1.7;
+            animation: fadeInUp 1s 0.2s ease both;
+        }
+
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* FORM */
+        .search-card {
+            background: rgba(20,20,20,0.92);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(201,168,76,0.2);
+            border-radius: 24px;
+            padding: 36px 40px;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+            animation: fadeInUp 1.1s 0.3s ease both;
+        }
+
+        .form-label-lux {
+            color: var(--gold);
+            font-size: 0.72rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-control-lux, .form-select-lux {
+            background: rgba(255,255,255,0.04) !important;
+            border: 1px solid rgba(201,168,76,0.2) !important;
+            color: var(--light) !important;
+            border-radius: 12px !important;
+            padding: 12px 16px !important;
+            font-family: 'DM Sans',sans-serif;
+            font-size: 0.92rem;
+            transition: all 0.3s;
+        }
+
+            .form-control-lux:focus, .form-select-lux:focus {
+                background: rgba(201,168,76,0.06) !important;
+                border-color: rgba(201,168,76,0.6) !important;
+                box-shadow: 0 0 0 3px rgba(201,168,76,0.12) !important;
+                outline: none;
+            }
+
+            .form-control-lux::placeholder {
+                color: rgba(245,240,232,0.3) !important;
+            }
+
+            .form-select-lux option {
+                background: #1a1a1a;
+                color: var(--light);
+            }
+
+            .form-select-lux:disabled {
+                opacity: 0.4;
+            }
+
+        .btn-search-lux {
+            background: linear-gradient(135deg,var(--gold) 0%,var(--gold-dark) 100%);
+            color: var(--dark);
+            border: none;
+            border-radius: 14px;
+            padding: 14px 36px;
+            font-weight: 600;
+            font-size: 0.92rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .btn-search-lux:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 12px 30px rgba(201,168,76,0.4);
+            }
+
+            .btn-search-lux .btn-shine {
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 60%;
+                height: 100%;
+                background: linear-gradient(90deg,transparent,rgba(255,255,255,0.25),transparent);
+                transition: left 0.5s;
+            }
+
+            .btn-search-lux:hover .btn-shine {
+                left: 150%;
+            }
+
+        .divider-gold {
+            height: 1px;
+            background: linear-gradient(90deg,transparent,rgba(201,168,76,0.3),transparent);
+            margin: 28px 0;
+        }
+
+        /* RESULTS */
+        #results-section {
+            display: block;
+            padding: 60px 0;
+            background: var(--dark-2);
+        }
+
+        .section-heading {
+            font-size: 2.5rem;
+            color: var(--white);
+            margin-bottom: 8px;
+        }
+
+            .section-heading span {
+                color: var(--gold);
+            }
+
+        .section-sub {
+            color: var(--muted);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        /* HOTEL CARD */
+        .hotel-card {
+            background: var(--dark-3);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+            height: 100%;
+        }
+
+            .hotel-card:hover {
+                transform: translateY(-8px);
+                border-color: rgba(201,168,76,0.3);
+                box-shadow: 0 24px 50px rgba(0,0,0,0.5);
+            }
+
+        .hotel-img-wrap {
+            position: relative;
+            overflow: hidden;
+            height: 200px;
+        }
+
+            .hotel-img-wrap img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.5s ease;
+            }
+
+        .hotel-card:hover .hotel-img-wrap img {
+            transform: scale(1.08);
+        }
+
+        .hotel-badge-img {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(13,13,13,0.85);
+            backdrop-filter: blur(8px);
+            color: var(--gold);
+            font-size: 0.72rem;
+            padding: 4px 10px;
+            border-radius: 50px;
+            border: 1px solid rgba(201,168,76,0.3);
+            letter-spacing: 1px;
+        }
+
+        .hotel-body {
+            padding: 20px;
+        }
+
+        .hotel-name {
+            font-family: 'Cormorant Garamond',serif;
+            font-size: 1.3rem;
+            color: var(--white);
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .hotel-location {
+            color: var(--muted);
+            font-size: 0.82rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .hotel-rating {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(201,168,76,0.1);
+            color: var(--gold);
+            font-size: 0.82rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 50px;
+        }
+
+        .btn-detail {
+            background: transparent;
+            border: 1px solid rgba(201,168,76,0.4);
+            color: var(--gold);
+            border-radius: 10px;
+            padding: 8px 20px;
+            font-size: 0.82rem;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+            .btn-detail:hover {
+                background: var(--gold);
+                color: var(--dark);
+                border-color: var(--gold);
+            }
+
+        /* SPINNER */
+        .lux-spinner {
+            width: 50px;
+            height: 50px;
+            border: 2px solid rgba(201,168,76,0.2);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @@keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* WIDGETS */
+        .widgets-section {
+            padding: 60px 0;
+            background: var(--dark-2);
+        }
+
+        .widget-card {
+            background: var(--dark-3);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: var(--radius);
+            padding: 28px;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .widget-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 2px;
+                background: linear-gradient(90deg,var(--gold-dark),var(--gold),var(--gold-dark));
+            }
+
+        .widget-title {
+            font-size: 0.72rem;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .currency-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+            .currency-item:last-child {
+                border-bottom: none;
+            }
+
+        .currency-flag {
+            font-size: 1.4rem;
+            margin-right: 8px;
+        }
+
+        .currency-code {
+            font-weight: 600;
+            color: var(--white);
+            font-size: 0.92rem;
+        }
+
+        .currency-rate {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--gold-light);
+        }
+
+        .converter-row {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 12px;
+            align-items: end;
+        }
+
+        .swap-btn {
+            background: rgba(201,168,76,0.15);
+            border: 1px solid rgba(201,168,76,0.3);
+            color: var(--gold);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+            .swap-btn:hover {
+                background: var(--gold);
+                color: var(--dark);
+            }
+
+        .weather-days {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .weather-day {
+            flex: 0 0 auto;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 12px;
+            padding: 12px 10px;
+            text-align: center;
+            min-width: 72px;
+            transition: all 0.3s;
+        }
+
+            .weather-day:hover, .weather-day.active {
+                background: rgba(201,168,76,0.1);
+                border-color: rgba(201,168,76,0.3);
+            }
+
+            .weather-day .day-name {
+                font-size: 0.72rem;
+                color: var(--muted);
+                margin-bottom: 6px;
+            }
+
+            .weather-day .day-emoji {
+                font-size: 1.6rem;
+                margin-bottom: 6px;
+            }
+
+            .weather-day .day-temp {
+                font-size: 0.85rem;
+                color: var(--light);
+                font-weight: 500;
+            }
+
+        .crypto-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+            .crypto-item:last-child {
+                border-bottom: none;
+            }
+
+        .crypto-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            margin-right: 10px;
+        }
+
+        .crypto-price {
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .crypto-name {
+            font-size: 0.82rem;
+            color: var(--muted);
+        }
+
+        /* DESTINATIONS */
+        .destinations-section {
+            padding: 80px 0;
+        }
+
+        .dest-card {
+            position: relative;
+            border-radius: var(--radius);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.4s ease;
+        }
+
+            .dest-card:hover {
+                transform: translateY(-6px);
+            }
+
+            .dest-card img {
+                width: 100%;
+                height: 280px;
+                object-fit: cover;
+                transition: transform 0.5s ease;
+            }
+
+            .dest-card:hover img {
+                transform: scale(1.08);
+            }
+
+        .dest-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top,rgba(0,0,0,0.8) 0%,transparent 60%);
+        }
+
+        .dest-info {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+        }
+
+        .dest-name {
+            font-family: 'Cormorant Garamond',serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .dest-count {
+            color: var(--gold-light);
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        /* SECTION LABEL */
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gold);
+            font-size: 0.72rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+            .section-label::before, .section-label::after {
+                content: '';
+                width: 30px;
+                height: 1px;
+                background: var(--gold);
+                opacity: 0.5;
+            }
+
+        /* FOOTER */
+        .footer-section {
+            background: var(--dark-2);
+            border-top: 1px solid rgba(201,168,76,0.12);
+            padding: 60px 0 30px;
+        }
+
+        .footer-brand {
+            font-family: 'Cormorant Garamond',serif;
+            font-size: 1.8rem;
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .footer-desc {
+            color: rgba(245,240,232,0.45);
+            font-size: 0.88rem;
+            line-height: 1.7;
+            max-width: 280px;
+        }
+
+        .footer-title {
+            color: var(--gold);
+            font-size: 0.72rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .footer-link {
+            display: block;
+            color: rgba(245,240,232,0.5);
+            text-decoration: none;
+            font-size: 0.88rem;
+            margin-bottom: 10px;
+            transition: color 0.2s;
+        }
+
+            .footer-link:hover {
+                color: var(--gold);
+            }
+
+        .footer-social {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .social-btn {
+            width: 38px;
+            height: 38px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+            .social-btn:hover {
+                background: rgba(201,168,76,0.15);
+                border-color: rgba(201,168,76,0.4);
+                color: var(--gold);
+            }
+
+        .footer-bottom {
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .footer-copy {
+            color: rgba(245,240,232,0.3);
+            font-size: 0.8rem;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold-dark);
+            border-radius: 3px;
+        }
+
+        @@media(max-width:768px) {
+            .search-card {
+                padding: 24px 20px;
+            }
+
+            .hero-title {
+                font-size: 2.6rem;
+            }
+
+            .converter-row {
+                grid-template-columns: 1fr;
+            }
+
+            .swap-btn {
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar-staylux">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-between w-100">
+                <a href="/" class="navbar-brand-logo">
+                    <div class="logo-icon"><i class="fas fa-gem text-dark" style="font-size:0.9rem;"></i></div>
+                    StayLux
+                </a>
+                <ul class="nav d-none d-lg-flex align-items-center gap-1">
+                    <li><a href="/Hotel/Index" class="nav-link">Keşfet</a></li>
+                    <li><a href="/Hotel/Search/" class="nav-link">Destinasyonlar</a></li>
+                    <li><a href="/AI/Index/" class="nav-link">Tur Oluştur</a></li>
+                    <li><a href="/About/Index/" class="nav-link">Hakkımızda</a></li>
+                    <li><a href="#" class="nav-link btn-nav-cta ms-2">Giriş Yap</a></li>
+                </ul>
+                <button class="btn d-lg-none" style="color:var(--gold);font-size:1.3rem;"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO + SEARCH FORM -->
+    <section class="hero-section">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <div class="row align-items-center g-5">
+
+                <!-- Sol -->
+                <div class="col-lg-5">
+                    <div class="hero-badge"><i class="fas fa-star" style="font-size:0.6rem;"></i> Dünyanın En İyi Otelleri</div>
+                    <h1 class="hero-title">Hayalindeki<br><span>Konaklamayı</span><br>Bul</h1>
+                    <p class="hero-subtitle">Dünya genelinde 2 milyondan fazla otel arasından seyahatinize en uygun seçeneği kolayca bulun.</p>
+                    <div class="d-flex gap-4">
+                        <div><div style="font-size:1.5rem;font-weight:700;color:var(--gold);font-family:'Cormorant Garamond',serif;">2M+</div><div style="font-size:0.75rem;color:var(--muted);letter-spacing:1px;">Otel Seçeneği</div></div>
+                        <div style="width:1px;background:rgba(255,255,255,0.1);"></div>
+                        <div><div style="font-size:1.5rem;font-weight:700;color:var(--gold);font-family:'Cormorant Garamond',serif;">150+</div><div style="font-size:0.75rem;color:var(--muted);letter-spacing:1px;">Ülke</div></div>
+                        <div style="width:1px;background:rgba(255,255,255,0.1);"></div>
+                        <div><div style="font-size:1.5rem;font-weight:700;color:var(--gold);font-family:'Cormorant Garamond',serif;">4.9</div><div style="font-size:0.75rem;color:var(--muted);letter-spacing:1px;">Ortalama Puan</div></div>
+                    </div>
+                </div>
+
+                <!-- Sağ: Form -->
+                <div class="col-lg-7">
+                    <div class="search-card">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <h2 style="font-size:1.6rem;color:var(--white);">Otel Ara</h2>
+                            <span style="font-size:0.75rem;color:var(--muted);letter-spacing:1px;">RapidAPI Powered</span>
+                        </div>
+
+                        <form id="searchForm" asp-action="Search" asp-controller="Hotel" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" id="destIdInput" name="DestId" />
+
+                            <div class="row g-3">
+                                <!-- Ülke -->
+                                <div class="col-md-6">
+                                    <label class="form-label-lux"><i class="fas fa-globe-europe" style="font-size:0.65rem;"></i> Ülke</label>
+                                    <select class="form-select-lux form-select" id="countrySelect" name="Country" required onchange="loadCities(this.value)">
+                                        <option value="">— Ülke Seçin —</option>
+                                        <option value="France">🇫🇷 Fransa</option>
+                                        <option value="Italy">🇮🇹 İtalya</option>
+                                        <option value="Spain">🇪🇸 İspanya</option>
+                                        <option value="Greece">🇬🇷 Yunanistan</option>
+                                        <option value="Germany">🇩🇪 Almanya</option>
+                                        <option value="Netherlands">🇳🇱 Hollanda</option>
+                                        <option value="Portugal">🇵🇹 Portekiz</option>
+                                        <option value="Austria">🇦🇹 Avusturya</option>
+                                        <option value="Switzerland">🇨🇭 İsviçre</option>
+                                        <option value="Croatia">🇭🇷 Hırvatistan</option>
+                                    </select>
+                                </div>
+
+                                <!-- Şehir -->
+                                <div class="col-md-6">
+                                    <label class="form-label-lux"><i class="fas fa-map-marker-alt" style="font-size:0.65rem;"></i> Şehir</label>
+                                    <select class="form-select-lux form-select" id="citySelect" name="CityName" required disabled>
+                                        <option value="">— Önce Ülke Seçin —</option>
+                                    </select>
+                                    <div id="cityStatus" style="min-height:16px;margin-top:5px;"></div>
+                                </div>
+
+                                <!-- Tarihler -->
+                                <div class="col-md-6">
+                                    <label class="form-label-lux"><i class="fas fa-calendar-alt" style="font-size:0.65rem;"></i> Giriş Tarihi</label>
+                                    <input type="date" class="form-control-lux form-control" name="ArrivalDate" id="checkIn" required />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label-lux"><i class="fas fa-calendar-check" style="font-size:0.65rem;"></i> Çıkış Tarihi</label>
+                                    <input type="date" class="form-control-lux form-control" name="DepartureDate" id="checkOut" required />
+                                </div>
+
+                                <!-- Kişi -->
+                                <div class="col-md-6">
+                                    <label class="form-label-lux"><i class="fas fa-user" style="font-size:0.65rem;"></i> Yetişkin Sayısı</label>
+                                    <select class="form-select-lux form-select" name="Adults">
+                                        <option value="1">1 Yetişkin</option>
+                                        <option value="2" selected>2 Yetişkin</option>
+                                        <option value="3">3 Yetişkin</option>
+                                        <option value="4">4 Yetişkin</option>
+                                        <option value="5">5+ Yetişkin</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label-lux"><i class="fas fa-child" style="font-size:0.65rem;"></i> Çocuk Sayısı</label>
+                                    <select class="form-select-lux form-select" name="Children">
+                                        <option value="0" selected>Çocuk Yok</option>
+                                        <option value="1">1 Çocuk</option>
+                                        <option value="2">2 Çocuk</option>
+                                        <option value="3">3 Çocuk</option>
+                                        <option value="4">4+ Çocuk</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="divider-gold"></div>
+
+                            <button type="submit" class="btn-search-lux" id="searchBtn">
+                                <div class="btn-shine"></div>
+                                <i class="fas fa-search me-2"></i> Otel Ara
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         RESULTS SECTION
+         Controller'dan Model gelince burası dolar.
+         foreach örneği aşağıda yorum olarak var.
+    ══════════════════════════════════════════ -->
+    <section id="results-section" style="@(Model != null && Model.Any() ? "display:block;" : "display:none;")padding:60px 0;background:var(--dark-2);">
+        <div class="container">
+            <div class="d-flex align-items-end justify-content-between mb-5">
+                <div>
+                    <div class="section-label">Arama Sonuçları</div>
+                    <h2 class="section-heading">Bulunan <span>Oteller</span></h2>
+                    <p class="section-sub" id="results-count"></p>
+                </div>
+            </div>
+
+            <div id="loadingOverlay" style="display:none;text-align:center;padding:60px 0;">
+                <div class="lux-spinner"></div>
+                <p style="color:var(--muted);letter-spacing:2px;font-size:0.82rem;">OTELLER YÜKLENIYOR…</p>
+            </div>
+            <div class="row g-4" id="hotelResults">
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var hotel in Model)
+                    {
+                        <div class="col-lg-4 col-md-6">
+                            <div class="hotel-card">
+                                <div class="hotel-img-wrap">
+                                    <img src="@(hotel.PhotoUrls?.FirstOrDefault() ?? "")" alt="@hotel.Name" loading="lazy" />
+                                    <span class="hotel-badge-img">Otel</span>
+                                </div>
+                                <div class="hotel-body">
+                                    <div class="hotel-name">@hotel.Name</div>
+                                    <!-- YENİ -->
+                                    <div class="hotel-location">
+                                        <i class="fas fa-map-marker-alt" style="color:var(--gold);font-size:0.7rem;"></i>
+                                        @GetCountryName(hotel.CountryCode)
+                                    </div>
+                                    <!-- Yıldız -->
+                                    @if (hotel.PropertyClass.HasValue && hotel.PropertyClass > 0)
+                                    {
+                                        <div style="color:var(--gold); font-size:0.78rem; margin-bottom:8px;">
+                                            @(new string('★', hotel.PropertyClass.Value))
+                                        </div>
+                                    }
+
+                                    <!-- Fiyat -->
+                                    @if (hotel.PriceBreakdown?.GrossPrice != null)
+                                    {
+                                        <div style="font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:var(--gold); margin-bottom:12px;">
+                                            @hotel.PriceBreakdown.GrossPrice.Value.ToString("N0")
+                                            <span style="font-size:0.72rem; color:var(--muted); font-family:'DM Sans',sans-serif;">
+                                                @hotel.PriceBreakdown.GrossPrice.Currency / gece
+                                            </span>
+                                        </div>
+                                    }
+
+                                    <div class="d-flex align-items-center justify-content-between mt-2">
+                                        <div>
+                                            <div class="hotel-rating">
+                                                <i class="fas fa-star" style="font-size:0.7rem;"></i>
+                                                @hotel.ReviewScore?.ToString("0.0")
+                                            </div>
+                                            @if (hotel.ReviewCount.HasValue)
+                                            {
+                                                <div style="font-size:0.72rem; color:var(--muted); margin-top:3px;">
+                                                    @hotel.ReviewCount yorum
+                                                </div>
+                                            }
+                                        </div>
+                                        <a href="/Hotel/Detail/@hotel.HotelId" class="btn-detail">
+                                            Detay <i class="fas fa-arrow-right" style="font-size:0.7rem;"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+            <div class="row g-4" id="hotelResults"></div>
+        </div>
+    </section>
+
+    <!-- WIDGETS -->
+    <section class="widgets-section">
+        <div class="container">
+            <div class="text-center mb-5">
+                <div class="section-label">Canlı Veriler</div>
+                <h2 class="section-heading">Seyahat <span>Araçları</span></h2>
+            </div>
+            <div class="row g-4">
+
+                <!-- Döviz Kurları -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="widget-card">
+                        <div class="widget-title">
+                            <i class="fas fa-coins">
+                            </i> Döviz Kurları <span style="margin-left:auto;font-size:0.7rem;color:var(--muted);">
+                                TL Bazlı
+                            </span>
+                        </div>
+                        <div class="currency-item">
+                            <div class="d-flex align-items-center">
+                                <span class="currency-flag">🇺🇸</span>
+                                <div>
+                                    <div class="currency-code">
+                                        USD
+                                    </div><div style="font-size:0.72rem;color:var(--muted);">Dolar</div>
+                                </div>
+                            </div><div class="currency-rate" id="usd-rate">@ViewBag.Usd</div>
+                        </div>
+                        <div class="currency-item"><div class="d-flex align-items-center"><span class="currency-flag">🇪🇺</span><div><div class="currency-code">EUR</div><div style="font-size:0.72rem;color:var(--muted);">Euro</div></div></div><div class="currency-rate" id="eur-rate">@ViewBag.Eur</div></div>
+                        <div class="currency-item"><div class="d-flex align-items-center"><span class="currency-flag">🇬🇧</span><div><div class="currency-code">GBP</div><div style="font-size:0.72rem;color:var(--muted);">Sterlin</div></div></div><div class="currency-rate" id="gbp-rate">@ViewBag.Gbp</div></div>
+                        <div class="currency-item"><div class="d-flex align-items-center"><span class="currency-flag">🇦🇪</span><div><div class="currency-code">AED</div><div style="font-size:0.72rem;color:var(--muted);">Dirhem</div></div></div><div class="currency-rate" id="aed-rate">@ViewBag.Aed</div></div>
+                        <div class="currency-item"><div class="d-flex align-items-center"><span class="currency-flag">🇯🇵</span><div><div class="currency-code">JPY</div><div style="font-size:0.72rem;color:var(--muted);">Yen</div></div></div><div class="currency-rate" id="jpy-rate">@ViewBag.Jpy</div></div>
+                        <form></form>
+                        <form asp-action="Index" asp-controller="Hotel" method="get">
+                            <button type="submit" class="btn-detail w-100 mt-3 justify-content-center" style="font-size:0.75rem;">
+                                <i class="fas fa-sync-alt"></i> Güncelle
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Döviz Çevirici -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="widget-card">
+                        <div class="widget-title"><i class="fas fa-exchange-alt"></i> Döviz Çevirici</div>
+                        <div class="mb-3"><label class="form-label-lux">Miktar</label><input type="number" class="form-control-lux form-control" id="convAmount" value="100" /></div>
+                        <div class="converter-row mb-3">
+                            <div>
+                                <label class="form-label-lux">Kaynak</label>
+                                <select class="form-select-lux form-select" id="convFrom">
+                                    <option value="USD">🇺🇸 USD</option>
+                                    <option value="EUR">🇪🇺 EUR</option>
+                                    <option value="GBP">🇬🇧 GBP</option>
+                                    <option value="TRY" selected>🇹🇷 TRY</option>
+                                    <option value="AED">🇦🇪 AED</option>
+                                    <option value="JPY">🇯🇵 JPY</option>
+                                    <option value="CHF">🇨🇭 CHF</option>
+                                    <option value="CAD">🇨🇦 CAD</option>
+                                </select>
+                            </div>
+                            <div><button class="swap-btn" onclick="swapCurrencies()"><i class="fas fa-arrows-alt-h"></i></button></div>
+                            <div>
+                                <label class="form-label-lux">Hedef</label>
+                                <select class="form-select-lux form-select" id="convTo">
+                                    <option value="USD" selected>🇺🇸 USD</option>
+                                    <option value="EUR">🇪🇺 EUR</option>
+                                    <option value="GBP">🇬🇧 GBP</option>
+                                    <option value="TRY">🇹🇷 TRY</option>
+                                    <option value="AED">🇦🇪 AED</option>
+                                    <option value="JPY">🇯🇵 JPY</option>
+                                    <option value="CHF">🇨🇭 CHF</option>
+                                    <option value="CAD">🇨🇦 CAD</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button onclick="convertCurrency()" class="btn-search-lux" style="padding:10px 20px;font-size:0.8rem;border-radius:10px;"><i class="fas fa-calculator me-1"></i> Çevir</button>
+                        <div id="convResult" class="mt-3 text-center" style="display:none;">
+                            <div style="font-size:0.78rem;color:var(--muted);">Sonuç</div>
+                            <div style="font-size:1.8rem;font-family:'Cormorant Garamond',serif;color:var(--gold);" id="convResultValue">—</div>
+                            <div style="font-size:0.75rem;color:var(--muted);" id="convResultLabel">—</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hava Durumu -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="widget-card">
+                        <div class="widget-title"><i class="fas fa-cloud-sun"></i> Hava Durumu</div>
+                        <div class="mb-3 d-flex gap-2">
+                            <input type="text" class="form-control-lux form-control" id="weatherCity" placeholder="Şehir girin..." />
+                            <button onclick="fetchWeather()" style="background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);color:var(--gold);border-radius:10px;padding:0 14px;cursor:pointer;"><i class="fas fa-search"></i></button>
+                        </div>
+                        <div id="weatherMain" style="display:none;" class="text-center mb-3">
+                            <div style="font-size:3rem;" id="weatherMainEmoji">⛅</div>
+                            <div style="font-size:1.8rem;font-family:'Cormorant Garamond',serif;color:var(--white);" id="weatherMainTemp">—</div>
+                            <div style="font-size:0.82rem;color:var(--muted);" id="weatherMainDesc">—</div>
+                            <div style="font-size:0.75rem;color:var(--gold);margin-top:4px;" id="weatherCityName">—</div>
+                        </div>
+                        <div class="weather-days" id="weatherDays">
+                            <div style="text-align:center;color:var(--muted);font-size:0.82rem;width:100%;padding:20px;">Şehir arayın…</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kripto -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="widget-card">
+                        <div class="widget-title"><i class="fab fa-bitcoin"></i> Kripto Piyasası</div>
+                        <div class="crypto-item"><div class="d-flex align-items-center"><div class="crypto-icon" style="background:rgba(247,147,26,0.15);color:#F7931A;">₿</div><div><div class="currency-code" style="font-size:0.85rem;">Bitcoin</div><div class="crypto-name">BTC</div></div></div><div class="text-end"><div class="crypto-price" id="btc-price">—</div></div></div>
+                        <div class="crypto-item"><div class="d-flex align-items-center"><div class="crypto-icon" style="background:rgba(98,126,234,0.15);color:#627EEA;">Ξ</div><div><div class="currency-code" style="font-size:0.85rem;">Ethereum</div><div class="crypto-name">ETH</div></div></div><div class="text-end"><div class="crypto-price" id="eth-price">—</div></div></div>
+                        <div class="crypto-item"><div class="d-flex align-items-center"><div class="crypto-icon" style="background:rgba(0,199,220,0.15);color:#00C7DC;">◎</div><div><div class="currency-code" style="font-size:0.85rem;">Binance</div><div class="crypto-name">BNB</div></div></div><div class="text-end"><div class="crypto-price" id="bnb-price">—</div></div></div>
+                        <div class="crypto-item"><div class="d-flex align-items-center"><div class="crypto-icon" style="background:rgba(38,161,123,0.15);color:#26A17B;">◎</div><div><div class="currency-code" style="font-size:0.85rem;">Solana</div><div class="crypto-name">SOL</div></div></div><div class="text-end"><div class="crypto-price" id="sol-price">—</div></div></div>
+                        <div class="crypto-item"><div class="d-flex align-items-center"><div class="crypto-icon" style="background:rgba(220,53,69,0.15);color:#dc3545;">◈</div><div><div class="currency-code" style="font-size:0.85rem;">XRP</div><div class="crypto-name">Ripple</div></div></div><div class="text-end"><div class="crypto-price" id="xrp-price">—</div></div></div>
+                            <button onclick="fetchCrypto()" class="btn-detail w-100 mt-3 justify-content-center" style="font-size:0.75rem;"><i class="fas fa-sync-alt"></i> Güncelle</button>
+                    </div>
+                </div>
+                <!--Akaryakıt-->
+                <div class="col-lg-3 col-md-6">
+                    <div class="widget-card">
+                        <div class="widget-title"><i class="fas fa-gas-pump"></i> Akaryakıt (ABD Bazlı)</div>
+                        <div class="currency-item">
+                            <div class="d-flex align-items-center">
+                                <span style="font-size:1.4rem; margin-right:8px;">⛽</span>
+                                <div><div class="currency-code">Benzin</div><div style="font-size:0.72rem;color:var(--muted);">Regular</div></div>
+                            </div>
+                            <div class="currency-rate">@(ViewBag.Benzin ?? "—") ₺</div>
+                        </div>
+                        <div class="currency-item">
+                            <div class="d-flex align-items-center">
+                                <span style="font-size:1.4rem; margin-right:8px;">🛢️</span>
+                                <div><div class="currency-code">Motorin</div><div style="font-size:0.72rem;color:var(--muted);">Diesel</div></div>
+                            </div>
+                            <div class="currency-rate">@(ViewBag.Motorin ?? "—") ₺</div>
+                        </div>
+                        <div style="font-size:0.68rem; color:var(--muted); margin-top:12px; text-align:center;">
+                            * ABD fiyatı × Dolar kuru + ÖTV + KDV dahil tahmini fiyat
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- POPULAR DESTINATIONS -->
+    <section class="destinations-section">
+        <div class="container">
+            <div class="text-center mb-5">
+                <div class="section-label">Keşfet</div>
+                <h2 class="section-heading">Popüler <span>Destinasyonlar</span></h2>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6"><div class="dest-card" onclick="quickSearch('Paris')"><img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80" alt="Paris" /><div class="dest-overlay"></div><div class="dest-info"><div class="dest-name">Paris</div><div class="dest-count"><i class="fas fa-hotel me-1"></i> 980+ Otel</div></div></div></div>
+                <div class="col-lg-4 col-md-6"><div class="dest-card" onclick="quickSearch('Rome')"><img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=600&q=80" alt="Roma" /><div class="dest-overlay"></div><div class="dest-info"><div class="dest-name">Roma</div><div class="dest-count"><i class="fas fa-hotel me-1"></i> 820+ Otel</div></div></div></div>
+                <div class="col-lg-4 col-md-6"><div class="dest-card" onclick="quickSearch('Barcelona')"><img src="https://images.unsplash.com/photo-1583422409516-2895a77efded?w=600&q=80" alt="Barselona" /><div class="dest-overlay"></div><div class="dest-info"><div class="dest-name">Barselona</div><div class="dest-count"><i class="fas fa-hotel me-1"></i> 640+ Otel</div></div></div></div>
+                <div class="col-lg-3 col-md-6"><div class="dest-card" onclick="quickSearch('Amsterdam')"><img src="https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=600&q=80" alt="Amsterdam" /><div class="dest-overlay"></div><div class="dest-info"><div class="dest-name">Amsterdam</div><div class="dest-count"><i class="fas fa-hotel me-1"></i> 420+ Otel</div></div></div></div>
+                <div class="col-lg-3 col-md-6"><div class="dest-card" onclick="quickSearch('Athens')"><img src="https://images.unsplash.com/photo-1555993539-1732b0258235?w=600&q=80" alt="Atina" /><div class="dest-overlay"></div><div class="dest-info"><div class="dest-name">Atina</div><div class="dest-count"><i class="fas fa-hotel me-1"></i> 380+ Otel</div></div></div></div>
+                <div class="col-lg-3 col-md-6"><div class="dest-card" onclick="quickSearch('Vienna')"><img src="https://images.unsplash.com/photo-1516550893923-42d28e5677af?w=600&q=80" alt="Viyana" /><div class="dest-overlay"></div><div class="dest-info"><div class="dest-name">Viyana</div><div class="dest-count"><i class="fas fa-hotel me-1"></i> 460+ Otel</div></div></div></div>
+                <div class="col-lg-3 col-md-6"><div class="dest-card" onclick="quickSearch('Lisbon')"><img src="https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=600&q=80" alt="Lizbon" /><div class="dest-overlay"></div><div class="dest-info"><div class="dest-name">Lizbon</div><div class="dest-count"><i class="fas fa-hotel me-1"></i> 340+ Otel</div></div></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer-section">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-4">
+                    <div class="footer-brand mb-3"><span style="color:var(--gold);">✦</span> StayLux</div>
+                    <p class="footer-desc">Dünyanın dört bir yanındaki en lüks otelleri tek platformda keşfedin.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-btn"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4">
+                    <div class="footer-title">Keşfet</div>
+                    <a href="#" class="footer-link">Oteller</a>
+                    <a href="#" class="footer-link">Destinasyonlar</a>
+                    <a href="#" class="footer-link">Son Dakika</a>
+                    <a href="#" class="footer-link">Lüks Tatil</a>
+                </div>
+                <div class="col-lg-2 col-md-4">
+                    <div class="footer-title">Destek</div>
+                    <a href="#" class="footer-link">Rezervasyon Yardımı</a>
+                    <a href="#" class="footer-link">İptal Politikası</a>
+                    <a href="#" class="footer-link">SSS</a>
+                    <a href="#" class="footer-link">İletişim</a>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <div class="footer-title">Bülten</div>
+                    <p class="footer-desc" style="margin-bottom:16px;">En iyi fırsatlardan ilk siz haberdar olun.</p>
+                    <div class="d-flex gap-2">
+                        <input type="email" class="form-control-lux form-control flex-1" placeholder="E-posta adresiniz" />
+                        <button class="btn-search-lux" style="width:auto;padding:12px 20px;border-radius:12px;white-space:nowrap;"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copy">© 2025 StayLux. Tüm hakları saklıdır. RapidAPI Partner.</p>
+                <div class="d-flex gap-4">
+                    <a href="#" class="footer-copy" style="text-decoration:none;">Gizlilik Politikası</a>
+                    <a href="#" class="footer-copy" style="text-decoration:none;">Kullanım Koşulları</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        async function convertCurrency() {
+            const amount = document.getElementById('convAmount').value;
+            const from = document.getElementById('convFrom').value;
+            const to = document.getElementById('convTo').value;
+
+            const res = await fetch(`/Hotel/Convert?from=${from}&to=${to}&amount=${amount}`);
+            const data = await res.json();
+
+            document.getElementById('convResult').style.display = 'block';
+            document.getElementById('convResultValue').textContent = data.result + ' ' + to;
+            document.getElementById('convResultLabel').textContent = amount + ' ' + from + ' = ' + data.result + ' ' + to;
+        }
+
+        const cityData = {
+            France: ['Paris', 'Lyon', 'Marseille', 'Nice', 'Bordeaux', 'Toulouse', 'Strasbourg', 'Cannes', 'Nantes', 'Montpellier'],
+            Italy: ['Rome', 'Milan', 'Venice', 'Florence', 'Naples', 'Turin', 'Bologna', 'Palermo', 'Verona', 'Genoa'],
+            Spain: ['Madrid', 'Barcelona', 'Seville', 'Valencia', 'Malaga', 'Granada', 'Bilbao', 'Ibiza', 'Mallorca', 'Tenerife'],
+            Greece: ['Athens', 'Santorini', 'Mykonos', 'Rhodes', 'Thessaloniki', 'Corfu', 'Zakynthos', 'Heraklion', 'Chania', 'Naxos'],
+            Germany: ['Berlin', 'Munich', 'Hamburg', 'Frankfurt', 'Cologne', 'Stuttgart', 'Dresden', 'Nuremberg', 'Leipzig', 'Heidelberg'],
+            Netherlands: ['Amsterdam', 'Rotterdam', 'The Hague', 'Utrecht', 'Eindhoven', 'Groningen', 'Maastricht', 'Haarlem', 'Delft', 'Leiden'],
+            Portugal: ['Lisbon', 'Porto', 'Algarve', 'Sintra', 'Cascais', 'Faro', 'Lagos', 'Coimbra', 'Braga', 'Evora'],
+            Austria: ['Vienna', 'Salzburg', 'Innsbruck', 'Graz', 'Linz', 'Hallstatt', 'Klagenfurt', 'Baden', 'Zell am See', 'Bregenz'],
+            Switzerland: ['Zurich', 'Geneva', 'Bern', 'Lucerne', 'Basel', 'Interlaken', 'Zermatt', 'Lausanne', 'St. Gallen', 'Lugano'],
+            Croatia: ['Zagreb', 'Dubrovnik', 'Split', 'Hvar', 'Zadar', 'Pula', 'Rijeka', 'Rovinj', 'Trogir', 'Korcula'],
+        };
+
+        function loadCities(country) {
+            const citySelect = document.getElementById('citySelect');
+            const cityStatus = document.getElementById('cityStatus');
+            const destIdInput = document.getElementById('destIdInput');
+
+            citySelect.innerHTML = '<option value="">— Şehir Seçin —</option>';
+            destIdInput.value = '';
+            cityStatus.textContent = '';
+
+            if (!country) { citySelect.disabled = true; return; }
+
+            const cities = cityData[country] || [];
+            cities.forEach(city => {
+                const opt = document.createElement('option');
+                opt.value = city;
+                opt.textContent = city;
+                citySelect.appendChild(opt);
+            });
+            citySelect.disabled = false;
+        }
+
+        document.getElementById('citySelect').addEventListener('change', function () {
+            document.getElementById('destIdInput').value = this.value;
+        });
+
+        document.getElementById('searchForm').addEventListener('submit', function (e) {
+            const city = document.getElementById('citySelect').value;
+            const checkIn = document.getElementById('checkIn').value;
+            const checkOut = document.getElementById('checkOut').value;
+
+            if (!city) {
+                e.preventDefault();
+                document.getElementById('cityStatus').innerHTML =
+                    '<span style="color:#f87171;font-size:0.72rem;">⚠ Lütfen bir şehir seçin</span>';
+                return;
+            }
+            if (checkIn >= checkOut) {
+                e.preventDefault();
+                alert('Çıkış tarihi, giriş tarihinden sonra olmalıdır.');
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const today = new Date();
+            const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
+            const nextWeek = new Date(today); nextWeek.setDate(today.getDate() + 7);
+            const fmt = d => d.toISOString().split('T')[0];
+            document.getElementById('checkIn').value = fmt(tomorrow);
+            document.getElementById('checkOut').value = fmt(nextWeek);
+            document.getElementById('checkIn').min = fmt(today);
+        });
+
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('.navbar-staylux');
+            nav.style.padding = window.scrollY > 50 ? '12px 0' : '18px 0';
+        });
+
+        function quickSearch(city) {
+            document.querySelector('.hero-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function fetchCurrencyRates() { /* TODO */ }
+        async function fetchWeather() {
+            const city = document.getElementById('weatherCity').value;
+            if (!city) return;
+
+            const res = await fetch(`/Hotel/Weather?city=${city}`);
+            const data = await res.json();
+
+            // Ana hava durumu
+            const condition = data.current_observation.condition;
+            const location = data.location;
+
+            document.getElementById('weatherMain').style.display = 'block';
+            document.getElementById('weatherMainTemp').textContent = condition.temperature + '°F';
+            document.getElementById('weatherMainDesc').textContent = condition.text;
+            document.getElementById('weatherCityName').textContent = location.city + ', ' + location.country;
+            document.getElementById('weatherMainEmoji').textContent = getWeatherEmoji(condition.code);
+
+            // Tahmin günleri
+            const forecasts = data.forecasts.slice(0, 4);
+            const daysEl = document.getElementById('weatherDays');
+            daysEl.innerHTML = '';
+
+            forecasts.forEach(f => {
+                daysEl.innerHTML += `
+            <div class="weather-day">
+                <div class="day-name">${f.day}</div>
+                <div class="day-emoji">${getWeatherEmoji(f.code)}</div>
+                <div class="day-temp">${f.low}° / ${f.high}°</div>
+            </div>
+        `;
+            });
+        }
+
+        function getWeatherEmoji(code) {
+            if (code <= 4) return '⛈️';
+            if (code <= 8) return '🌨️';
+            if (code <= 12) return '🌧️';
+            if (code <= 18) return '🌦️';
+            if (code <= 24) return '🌬️';
+            if (code <= 28) return '☁️';
+            if (code <= 30) return '⛅';
+            if (code == 32 || code == 34 || code == 36) return '☀️';
+            if (code <= 40) return '🌧️';
+            if (code <= 46) return '🌨️';
+            if (code <= 47) return '⛈️';
+            return '🌡️';
+        }
+        async function fetchCrypto() {
+            const res = await fetch('/Hotel/GetCrypto');
+            const data = await res.json();
+            const coins = data.data.coins;
+
+            coins.forEach(coin => {
+                const priceEl = document.getElementById(`${coin.symbol.toLowerCase()}-price`);
+                if (priceEl) {
+                    const price = parseFloat(coin.price).toLocaleString('tr-TR', { maximumFractionDigits: 2 });
+                    const change = parseFloat(coin.change);
+                    const color = change >= 0 ? '#4ade80' : '#f87171';
+                    const arrow = change >= 0 ? '▲' : '▼';
+                    priceEl.innerHTML = `$${price} <span style="color:${color}; font-size:0.75rem;">${arrow} ${Math.abs(change)}%</span>`;
+                }
+            });
+        }
+
+        // Sayfa açılınca otomatik çek
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchCrypto();
+        });
+
+        function swapCurrencies() {
+            const f = document.getElementById('convFrom');
+            const t = document.getElementById('convTo');
+            [f.value, t.value] = [t.value, f.value];
+        }
+
+    </script>
+    @functions {
+        string GetCountryName(string code)
+        {
+            return code?.ToUpper() switch
+            {
+                "FR" => "Fransa",
+                "IT" => "İtalya",
+                "ES" => "İspanya",
+                "GR" => "Yunanistan",
+                "DE" => "Almanya",
+                "NL" => "Hollanda",
+                "PT" => "Portekiz",
+                "AT" => "Avusturya",
+                "CH" => "İsviçre",
+                "HR" => "Hırvatistan",
+                _ => code ?? "—"
+            };
+        }
+    }
+</body>
+</html>

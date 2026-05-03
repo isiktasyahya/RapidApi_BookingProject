@@ -1,0 +1,940 @@
+﻿
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hakkımızda — StayLux</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --gold: #C9A84C;
+            --gold-light: #E8C96A;
+            --gold-dark: #9A7A2E;
+            --dark: #0D0D0D;
+            --dark-2: #141414;
+            --dark-3: #1E1E1E;
+            --light: #F5F0E8;
+            --muted: #888;
+            --white: #FFFFFF;
+            --radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--dark);
+            color: var(--light);
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 300;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 500;
+        }
+
+        /* NAVBAR */
+        .navbar-staylux {
+            background: rgba(13,13,13,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(201,168,76,0.15);
+            padding: 18px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: var(--gold) !important;
+            letter-spacing: 2px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .navbar-staylux .nav-link {
+            color: rgba(245,240,232,0.75) !important;
+            font-size: 0.88rem;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            font-weight: 400;
+            padding: 8px 16px !important;
+            transition: color 0.2s;
+        }
+
+            .navbar-staylux .nav-link:hover {
+                color: var(--gold) !important;
+            }
+
+        .btn-nav-cta {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: var(--dark) !important;
+            font-weight: 600 !important;
+            border-radius: 50px;
+            padding: 8px 24px !important;
+            font-size: 0.82rem !important;
+            letter-spacing: 1px;
+        }
+
+        /* HERO */
+        .about-hero {
+            min-height: 60vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .about-hero-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.25);
+            animation: heroZoom 20s ease-in-out infinite alternate;
+        }
+
+        @@keyframes heroZoom {
+            from {
+                transform: scale(1.0);
+            }
+
+            to {
+                transform: scale(1.06);
+            }
+        }
+
+        .about-hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(160deg, rgba(13,13,13,0.7) 0%, rgba(201,168,76,0.05) 100%);
+        }
+
+        .about-hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 80px 0;
+        }
+
+        /* SECTION LABEL */
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gold);
+            font-size: 0.72rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+            .section-label::before, .section-label::after {
+                content: '';
+                width: 30px;
+                height: 1px;
+                background: var(--gold);
+                opacity: 0.5;
+            }
+
+        /* CONTENT CARDS */
+        .content-card {
+            background: var(--dark-3);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: var(--radius);
+            padding: 36px;
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+        }
+
+            .content-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 2px;
+                background: linear-gradient(90deg, transparent, rgba(201,168,76,0.4), transparent);
+            }
+
+        /* STATS */
+        .stat-card {
+            background: var(--dark-3);
+            border: 1px solid rgba(201,168,76,0.15);
+            border-radius: var(--radius);
+            padding: 32px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+            .stat-card:hover {
+                border-color: rgba(201,168,76,0.4);
+                transform: translateY(-4px);
+            }
+
+            .stat-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 2px;
+                background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-dark));
+            }
+
+        .stat-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            font-weight: 600;
+            color: var(--gold);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.78rem;
+            color: var(--muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 8px;
+        }
+
+        /* TEAM CARDS */
+        .team-card {
+            background: var(--dark-3);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: all 0.4s ease;
+            height: 100%;
+        }
+
+            .team-card:hover {
+                border-color: rgba(201,168,76,0.3);
+                transform: translateY(-6px);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            }
+
+        .team-img {
+            height: 260px;
+            overflow: hidden;
+            position: relative;
+        }
+
+            .team-img img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.5s ease;
+                filter: grayscale(30%);
+            }
+
+        .team-card:hover .team-img img {
+            transform: scale(1.05);
+            filter: grayscale(0%);
+        }
+
+        .team-body {
+            padding: 24px;
+        }
+
+        .team-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            color: var(--white);
+            margin-bottom: 4px;
+        }
+
+        .team-role {
+            font-size: 0.78rem;
+            color: var(--gold);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .team-social {
+            display: flex;
+            gap: 8px;
+        }
+
+            .team-social a {
+                width: 32px;
+                height: 32px;
+                background: rgba(255,255,255,0.05);
+                border: 1px solid rgba(255,255,255,0.08);
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--muted);
+                text-decoration: none;
+                font-size: 0.8rem;
+                transition: all 0.2s;
+            }
+
+                .team-social a:hover {
+                    background: rgba(201,168,76,0.15);
+                    border-color: rgba(201,168,76,0.3);
+                    color: var(--gold);
+                }
+
+        /* VALUES */
+        .value-card {
+            background: var(--dark-3);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: var(--radius);
+            padding: 28px;
+            transition: all 0.3s;
+            height: 100%;
+        }
+
+            .value-card:hover {
+                border-color: rgba(201,168,76,0.25);
+            }
+
+        .value-icon {
+            width: 52px;
+            height: 52px;
+            background: rgba(201,168,76,0.1);
+            border: 1px solid rgba(201,168,76,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+            .value-icon i {
+                color: var(--gold);
+                font-size: 1.2rem;
+            }
+
+        .value-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            color: var(--white);
+            margin-bottom: 10px;
+        }
+
+        .value-desc {
+            font-size: 0.88rem;
+            color: rgba(245,240,232,0.55);
+            line-height: 1.7;
+        }
+
+        /* TIMELINE */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+            .timeline::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                width: 1px;
+                background: linear-gradient(to bottom, transparent, rgba(201,168,76,0.4), transparent);
+            }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 32px;
+        }
+
+            .timeline-item:last-child {
+                padding-bottom: 0;
+            }
+
+        .timeline-dot {
+            position: absolute;
+            left: -38px;
+            top: 4px;
+            width: 14px;
+            height: 14px;
+            background: var(--gold);
+            border-radius: 50%;
+            border: 2px solid var(--dark);
+            box-shadow: 0 0 0 4px rgba(201,168,76,0.2);
+        }
+
+        .timeline-year {
+            font-size: 0.72rem;
+            color: var(--gold);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .timeline-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            color: var(--white);
+            margin-bottom: 6px;
+        }
+
+        .timeline-desc {
+            font-size: 0.85rem;
+            color: rgba(245,240,232,0.5);
+            line-height: 1.6;
+        }
+
+        /* DIVIDER */
+        .divider-gold {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(201,168,76,0.3), transparent);
+            margin: 60px 0;
+        }
+
+        /* CTA */
+        .cta-section {
+            background: var(--dark-2);
+            border-top: 1px solid rgba(201,168,76,0.1);
+            border-bottom: 1px solid rgba(201,168,76,0.1);
+            padding: 80px 0;
+        }
+
+        .btn-cta {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: var(--dark);
+            border: none;
+            border-radius: 50px;
+            padding: 14px 40px;
+            font-weight: 600;
+            font-size: 0.92rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .btn-cta:hover {
+                box-shadow: 0 12px 30px rgba(201,168,76,0.4);
+                transform: translateY(-2px);
+                color: var(--dark);
+            }
+
+        /* FOOTER */
+        .footer-section {
+            background: var(--dark-2);
+            border-top: 1px solid rgba(201,168,76,0.12);
+            padding: 60px 0 30px;
+        }
+
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .footer-desc {
+            color: rgba(245,240,232,0.45);
+            font-size: 0.88rem;
+            line-height: 1.7;
+            max-width: 280px;
+        }
+
+        .footer-title {
+            color: var(--gold);
+            font-size: 0.72rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .footer-link {
+            display: block;
+            color: rgba(245,240,232,0.5);
+            text-decoration: none;
+            font-size: 0.88rem;
+            margin-bottom: 10px;
+            transition: color 0.2s;
+        }
+
+            .footer-link:hover {
+                color: var(--gold);
+            }
+
+        .footer-social {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .social-btn {
+            width: 38px;
+            height: 38px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+            .social-btn:hover {
+                background: rgba(201,168,76,0.15);
+                border-color: rgba(201,168,76,0.4);
+                color: var(--gold);
+            }
+
+        .footer-bottom {
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .footer-copy {
+            color: rgba(245,240,232,0.3);
+            font-size: 0.8rem;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold-dark);
+            border-radius: 3px;
+        }
+
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease both;
+        }
+
+        .fade-in-2 {
+            animation: fadeInUp 0.6s 0.1s ease both;
+        }
+
+        .fade-in-3 {
+            animation: fadeInUp 0.6s 0.2s ease both;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar-staylux">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-between w-100">
+                <a href="/" class="navbar-brand-logo">
+                    <div class="logo-icon"><i class="fas fa-gem text-dark" style="font-size:0.9rem;"></i></div>
+                    StayLux
+                </a>
+                <ul class="nav d-none d-lg-flex align-items-center gap-1">
+                    <li><a href="/Hotel/Index" class="nav-link">Keşfet</a></li>
+                    <li><a href="/Hotel/Search/" class="nav-link">Destinasyonlar</a></li>
+                    <li><a href="/AI/Index/" class="nav-link">Tur Oluştur</a></li>
+                    <li><a href="/About/Index/" class="nav-link">Hakkımızda</a></li>
+                    <li><a href="#" class="nav-link btn-nav-cta ms-2">Giriş Yap</a></li>
+                </ul>
+                <button class="btn d-lg-none" style="color:var(--gold);font-size:1.3rem;"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="about-hero">
+        <div class="about-hero-bg"></div>
+        <div class="about-hero-overlay"></div>
+        <div class="container about-hero-content">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <div class="section-label fade-in">Bizim Hikayemiz</div>
+                    <h1 style="font-size:clamp(2.8rem,5vw,5rem); color:var(--white); line-height:1.05; margin-bottom:20px;" class="fade-in-2">
+                        Lüksü <span style="color:var(--gold);">Herkes İçin</span><br>Erişilebilir Kılıyoruz
+                    </h1>
+                    <p style="font-size:1.05rem; color:rgba(245,240,232,0.65); max-width:540px; line-height:1.8;" class="fade-in-3">
+                        StayLux, 2020 yılında dünya genelindeki en seçkin otelleri tek bir platformda bir araya getirme vizyonuyla kuruldu. Bugün 150'den fazla ülkede 2 milyonun üzerinde otel seçeneği sunuyoruz.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <section style="padding: 60px 0; background: var(--dark-2);">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="stat-card fade-in">
+                        <div class="stat-number">2M+</div>
+                        <div class="stat-label">Otel Seçeneği</div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="stat-card fade-in-2">
+                        <div class="stat-number">150+</div>
+                        <div class="stat-label">Ülke</div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="stat-card fade-in-3">
+                        <div class="stat-number">500K+</div>
+                        <div class="stat-label">Mutlu Müşteri</div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="stat-card fade-in">
+                        <div class="stat-number">4.9</div>
+                        <div class="stat-label">Ortalama Puan</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HAKKIMIZDA -->
+    <section style="padding: 80px 0;">
+        <div class="container">
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-6">
+                    <div class="section-label">Biz Kimiz</div>
+                    <h2 style="font-size:2.8rem; color:var(--white); margin-bottom:24px;">
+                        Seyahat Deneyimini <span style="color:var(--gold);">Yeniden Tanımlıyoruz</span>
+                    </h2>
+                    <p style="color:rgba(245,240,232,0.6); line-height:1.9; margin-bottom:20px;">
+                        StayLux olarak inanıyoruz ki her yolculuk bir anı bırakmalı. Bu yüzden sadece otel rezervasyonu değil, tam bir seyahat deneyimi sunuyoruz. RapidAPI teknolojisiyle güçlendirilmiş platformumuz, gerçek zamanlı fiyatlar ve anlık müsaitlik bilgisiyle sizlere hizmet ediyor.
+                    </p>
+                    <p style="color:rgba(245,240,232,0.6); line-height:1.9; margin-bottom:32px;">
+                        Ekibimiz, turizm sektöründe 10 yılı aşkın deneyime sahip uzmanlardan oluşmaktadır. Her kararımızda müşteri memnuniyetini en ön planda tutarak, lüksü erişilebilir kılmak için çalışıyoruz.
+                    </p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <div style="width:36px; height:36px; background:rgba(201,168,76,0.1); border:1px solid rgba(201,168,76,0.2); border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                                <i class="fas fa-shield-alt" style="color:var(--gold); font-size:0.9rem;"></i>
+                            </div>
+                            <span style="font-size:0.85rem; color:rgba(245,240,232,0.7);">Güvenli Ödeme</span>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <div style="width:36px; height:36px; background:rgba(201,168,76,0.1); border:1px solid rgba(201,168,76,0.2); border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                                <i class="fas fa-headset" style="color:var(--gold); font-size:0.9rem;"></i>
+                            </div>
+                            <span style="font-size:0.85rem; color:rgba(245,240,232,0.7);">7/24 Destek</span>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <div style="width:36px; height:36px; background:rgba(201,168,76,0.1); border:1px solid rgba(201,168,76,0.2); border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                                <i class="fas fa-star" style="color:var(--gold); font-size:0.9rem;"></i>
+                            </div>
+                            <span style="font-size:0.85rem; color:rgba(245,240,232,0.7);">En İyi Fiyat Garantisi</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div style="position:relative;">
+                        <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=700&q=80"
+                             style="width:100%; border-radius:20px; filter:brightness(0.85);" alt="StayLux" />
+                        <div style="position:absolute; bottom:-20px; left:-20px; background:var(--dark-3); border:1px solid rgba(201,168,76,0.2); border-radius:16px; padding:20px 24px;">
+                            <div style="font-family:'Cormorant Garamond',serif; font-size:2rem; color:var(--gold); font-weight:600;">2020</div>
+                            <div style="font-size:0.75rem; color:var(--muted); letter-spacing:1px;">KURULUŞ YILI</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider-gold"></div>
+
+    <!-- DEĞERLERİMİZ -->
+    <section style="padding: 0 0 80px;">
+        <div class="container">
+            <div class="text-center mb-5">
+                <div class="section-label">Temel İlkelerimiz</div>
+                <h2 style="font-size:2.5rem; color:var(--white);">Değerlerimiz</h2>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="value-card">
+                        <div class="value-icon"><i class="fas fa-gem"></i></div>
+                        <div class="value-title">Kalite</div>
+                        <p class="value-desc">Her otel seçiminde en yüksek kalite standartlarını gözetir, müşterilerimize yalnızca en iyisini sunarız.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="value-card">
+                        <div class="value-icon"><i class="fas fa-handshake"></i></div>
+                        <div class="value-title">Güven</div>
+                        <p class="value-desc">Şeffaf fiyatlandırma ve dürüst iletişimle müşterilerimizin güvenini kazanmak en büyük önceliğimizdir.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="value-card">
+                        <div class="value-icon"><i class="fas fa-bolt"></i></div>
+                        <div class="value-title">Yenilik</div>
+                        <p class="value-desc">Teknolojinin gücünü kullanarak seyahat deneyimini sürekli geliştiriyor, yeni çözümler üretiyoruz.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="value-card">
+                        <div class="value-icon"><i class="fas fa-heart"></i></div>
+                        <div class="value-title">Tutku</div>
+                        <p class="value-desc">Seyahate duyduğumuz tutkuyu her hizmetimize yansıtır, unutulmaz anılar yaratmanıza yardımcı oluruz.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider-gold"></div>
+
+    <!-- TARİHÇE -->
+    <section style="padding: 80px 0;">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-5">
+                    <div class="section-label">Yolculuğumuz</div>
+                    <h2 style="font-size:2.5rem; color:var(--white); margin-bottom:16px;">Tarihçemiz</h2>
+                    <p style="color:rgba(245,240,232,0.55); line-height:1.8;">
+                        Küçük bir ekiple başlayan StayLux, bugün dünyanın dört bir yanındaki milyonlarca kullanıcıya hizmet veren bir platforma dönüştü.
+                    </p>
+                </div>
+                <div class="col-lg-7">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-year">2020</div>
+                            <div class="timeline-title">StayLux Kuruldu</div>
+                            <p class="timeline-desc">5 kişilik küçük bir ekiple İstanbul'da kurulan StayLux, ilk yılında 10.000 kullanıcıya ulaştı.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-year">2021</div>
+                            <div class="timeline-title">RapidAPI Entegrasyonu</div>
+                            <p class="timeline-desc">Gerçek zamanlı veri için RapidAPI ile ortaklık kuruldu, 50+ ülkede otel listelemeleri başladı.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-year">2022</div>
+                            <div class="timeline-title">100.000 Kullanıcı</div>
+                            <p class="timeline-desc">Platform, 100.000 aktif kullanıcıya ulaştı ve Avrupa pazarına genişledi.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-year">2023</div>
+                            <div class="timeline-title">Global Büyüme</div>
+                            <p class="timeline-desc">150+ ülkede 2 milyon otel seçeneğiyle dünyanın en kapsamlı seyahat platformlarından biri oldu.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-year">2024</div>
+                            <div class="timeline-title">500.000 Mutlu Müşteri</div>
+                            <p class="timeline-desc">500.000 başarılı rezervasyon ve 4.9 yıldız ortalama puanla sektörün liderleri arasına girdi.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider-gold"></div>
+
+    <!-- EKİBİMİZ -->
+    <section style="padding: 80px 0;">
+        <div class="container">
+            <div class="text-center mb-5">
+                <div class="section-label">İnsanlarımız</div>
+                <h2 style="font-size:2.5rem; color:var(--white);">Ekibimiz</h2>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="team-card">
+                        <div class="team-img">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80" alt="CEO" />
+                        </div>
+                        <div class="team-body">
+                            <div class="team-name">Yahya Işıktaş</div>
+                            <div class="team-role">CEO & Kurucu</div>
+                            <p style="font-size:0.82rem; color:rgba(245,240,232,0.5); margin-bottom:14px;">10 yıllık turizm deneyimiyle StayLux'u hayata geçirdi.</p>
+                            <div class="team-social">
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="team-card">
+                        <div class="team-img">
+                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80" alt="CTO" />
+                        </div>
+                        <div class="team-body">
+                            <div class="team-name">İrem Karacalar</div>
+                            <div class="team-role">CTO</div>
+                            <p style="font-size:0.82rem; color:rgba(245,240,232,0.5); margin-bottom:14px;">Teknoloji altyapısını yöneten deneyimli yazılım mühendisi.</p>
+                            <div class="team-social">
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#"><i class="fab fa-github"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="team-card">
+                        <div class="team-img">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80" alt="CMO" />
+                        </div>
+                        <div class="team-body">
+                            <div class="team-name">Mehmet Demir</div>
+                            <div class="team-role">CMO</div>
+                            <p style="font-size:0.82rem; color:rgba(245,240,232,0.5); margin-bottom:14px;">Pazarlama stratejileriyle StayLux'un büyümesini yönlendiriyor.</p>
+                            <div class="team-social">
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="team-card">
+                        <div class="team-img">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80" alt="COO" />
+                        </div>
+                        <div class="team-body">
+                            <div class="team-name">Zeynep Arslan</div>
+                            <div class="team-role">COO</div>
+                            <p style="font-size:0.82rem; color:rgba(245,240,232,0.5); margin-bottom:14px;">Operasyonel mükemmelliği sağlayan deneyimli yönetici.</p>
+                            <div class="team-social">
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container text-center">
+            <div class="section-label justify-content-center">Hemen Başlayın</div>
+            <h2 style="font-size:2.8rem; color:var(--white); margin-bottom:16px;">
+                Hayalinizdeki Oteli <span style="color:var(--gold);">Bugün Bulun</span>
+            </h2>
+            <p style="color:rgba(245,240,232,0.55); font-size:1rem; max-width:480px; margin:0 auto 36px; line-height:1.8;">
+                2 milyonun üzerinde otel seçeneği ve gerçek zamanlı fiyatlarla hayalinizdeki tatili planlayın.
+            </p>
+            <a href="/Hotel/Index" class="btn-cta">
+                <i class="fas fa-search"></i> Otel Ara
+            </a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer-section">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-4">
+                    <div class="footer-brand mb-3"><span style="color:var(--gold);">✦</span> StayLux</div>
+                    <p class="footer-desc">Dünyanın dört bir yanındaki en lüks otelleri tek platformda keşfedin.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-btn"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4">
+                    <div class="footer-title">Keşfet</div>
+                    <a href="#" class="footer-link">Oteller</a>
+                    <a href="#" class="footer-link">Destinasyonlar</a>
+                    <a href="#" class="footer-link">Son Dakika</a>
+                    <a href="#" class="footer-link">Lüks Tatil</a>
+                </div>
+                <div class="col-lg-2 col-md-4">
+                    <div class="footer-title">Destek</div>
+                    <a href="#" class="footer-link">Rezervasyon Yardımı</a>
+                    <a href="#" class="footer-link">İptal Politikası</a>
+                    <a href="#" class="footer-link">SSS</a>
+                    <a href="#" class="footer-link">İletişim</a>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <div class="footer-title">Bülten</div>
+                    <p class="footer-desc" style="margin-bottom:16px;">En iyi fırsatlardan ilk siz haberdar olun.</p>
+                    <div class="d-flex gap-2">
+                        <input type="email" style="background:rgba(255,255,255,0.04); border:1px solid rgba(201,168,76,0.2); color:var(--light); border-radius:12px; padding:10px 14px; font-family:'DM Sans',sans-serif; flex:1;" placeholder="E-posta adresiniz" />
+                        <button style="background:linear-gradient(135deg,var(--gold),var(--gold-dark)); color:var(--dark); border:none; border-radius:12px; padding:10px 16px; cursor:pointer;">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copy">© 2025 StayLux. Tüm hakları saklıdır.</p>
+                <div class="d-flex gap-4">
+                    <a href="#" class="footer-copy" style="text-decoration:none;">Gizlilik Politikası</a>
+                    <a href="#" class="footer-copy" style="text-decoration:none;">Kullanım Koşulları</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>window.addEventListener('scroll', () => {
+        const nav = document.querySelector('.navbar-staylux');
+        nav.style.padding = window.scrollY > 50 ? '12px 0' : '18px 0';
+    });</script>
+</body>
+</html>
